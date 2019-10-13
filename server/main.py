@@ -3,7 +3,11 @@ from os import environ
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit, join_room
 
-app = Flask("__main__")
+app = Flask(
+    "__main__",
+    static_folder="../client/build/static",
+    template_folder="../client/build"
+)
 
 @app.route("/")
 def index():
