@@ -9,6 +9,8 @@ pylint = "*"
 [packages]
 flask = "*"
 flask-socketio = "*"
+flask-cors = "*"
+flask-debug = "*"
 
 [requires]
 python_version = "3.7"
