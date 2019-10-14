@@ -1,0 +1,1 @@
+FLASK_ENV="production" python ./server/main.py

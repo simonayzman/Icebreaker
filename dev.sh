@@ -1,0 +1,1 @@
+FLASK_ENV="development" python ./server/main.py

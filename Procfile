@@ -1,1 +1,1 @@
-web: `python server/main.py`
+web: `./prod.sh`
