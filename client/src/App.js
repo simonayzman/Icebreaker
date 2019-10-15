@@ -4,19 +4,15 @@ import io from "socket.io-client";
 import logo from './logo.svg';
 import './App.css';
 
-const CONFIG = window.config || {
-  token: "Hello DEV Flask",
-  api: "http://localhost",
-  port: 5000,
-};
-
+const CONFIG = window.config || { token: "Hello DEV Flask", api: "http://localhost", port: 8000 };
 const API = `${CONFIG.api}:${CONFIG.port}`;
+
 const socket = io();
 
 export default class App extends Component {
   componentDidMount() {
     socket.on("connect", data => console.log("Socket connected on the front-end."));
-    setInterval(() => socket.emit("client_request", { test: "test"}), 1500)
+    setInterval(() => socket.emit("client_request", { user: window.location.href }), 5000)
   }
 
   render() {
@@ -28,7 +24,7 @@ export default class App extends Component {
             Edit <code>src/App.js</code> and save to reload.
           </p>
           <p>
-            {CONFIG.token} querying {API}
+            {CONFIG.token}
           </p>
           <a
             className="App-link"
