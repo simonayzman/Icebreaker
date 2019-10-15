@@ -11,7 +11,7 @@ configs = {
         "client": {
             "token": "Hello DEV Flask",
             "api": "http://localhost",
-            "port": 5000,
+            "port": 8000,
         },
         "server": {
             "static": "../client/build",
@@ -72,6 +72,3 @@ def on_chat_sent(data):
     print('message sent')
     room = data['room']
     emit('message_sent', data, room=room)
-
-if __name__ == '__main__':
-    socketio.run(app, debug=True) # port=configs[environ.get('FLASK_ENV')]['client']['port'])
