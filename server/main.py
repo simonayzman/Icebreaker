@@ -39,7 +39,7 @@ app = Flask(
 )
 Debug(app)
 CORS(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode="eventlet")
 
 # App routes
 @app.route("/")
@@ -69,4 +69,5 @@ def on_chat_sent(data):
     room = data['room']
     emit('message_sent', data, room=room)
 
-socketio.run(app, debug=True, port=configs[environ.get('FLASK_ENV')]['client']['port'])
+if __name__ == '__main__':
+    socketio.run(app, debug=True) # port=configs[environ.get('FLASK_ENV')]['client']['port'])
