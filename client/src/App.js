@@ -4,8 +4,14 @@ import io from "socket.io-client";
 import logo from './logo.svg';
 import './App.css';
 
-// http://deep-dive-072193.herokuapp.com/
-const socket = io("http://localhost:5000")
+const CONFIG = window.config || {
+  token: "Hello DEV Flask",
+  api: "http://localhost",
+  port: 5000,
+};
+
+const API = `${CONFIG.api}:${CONFIG.port}`;
+const socket = io(API);
 
 export default class App extends Component {
   componentDidMount() {
@@ -21,7 +27,7 @@ export default class App extends Component {
             Edit <code>src/App.js</code> and save to reload.
           </p>
           <p>
-            Also, {window.token}
+            {CONFIG.token} querying {API}
           </p>
           <a
             className="App-link"
