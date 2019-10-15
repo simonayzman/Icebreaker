@@ -16,6 +16,7 @@ const socket = io();
 export default class App extends Component {
   componentDidMount() {
     socket.on("connect", data => console.log("Socket connected on the front-end."));
+    setInterval(() => socket.emit("client_request", { test: "test"}), 1500)
   }
 
   render() {
