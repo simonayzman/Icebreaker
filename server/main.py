@@ -69,4 +69,4 @@ def on_chat_sent(data):
     room = data['room']
     emit('message_sent', data, room=room)
 
-socketio.run(app, debug=True)
+socketio.run(app, debug=True, host=configs[environ.get('FLASK_ENV')]['client']['api'], port=configs[environ.get('FLASK_ENV')]['client']['port'])
