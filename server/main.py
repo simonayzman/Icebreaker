@@ -49,7 +49,7 @@ def index():
 
 @app.route("/<path:path>")
 def indexPath(path):
-    return send_from_directory(configs[environ.get('FLASK_ENV')]['server']["static"], path)
+    return send_from_directory(configs[environ.get('FLASK_ENV')]['server']["template"], path)
 
 # Socket connections
 @socketio.on('connect')
