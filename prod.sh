@@ -1,1 +1,1 @@
-FLASK_ENV="production" python ./server/main.py
+FLASK_ENV=production gunicorn --worker-class eventlet -w 1 --chdir ./server main:app
