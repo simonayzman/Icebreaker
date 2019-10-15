@@ -11,7 +11,7 @@ const CONFIG = window.config || {
 };
 
 const API = `${CONFIG.api}:${CONFIG.port}`;
-const socket = io(API);
+const socket = io();
 
 export default class App extends Component {
   componentDidMount() {
