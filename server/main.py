@@ -56,6 +56,10 @@ def indexPath(path):
 def on_connect():
     print('Socket connected on the back-end.')
 
+@socketio.on('client_request')
+def on_client_request(data):
+    print(f'client request: {data}')
+
 @socketio.on('join_room')
 def on_join(data):
     print('room joined')
