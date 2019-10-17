@@ -28,10 +28,15 @@ configs = {
     },
 }
 
+
+def getConfig(platform="server"):
+    return configs[environ.get("FLASK_ENV")][platform]
+
+
 app = Flask(
     __name__,
-    static_folder=configs[environ.get("FLASK_ENV")]["server"]["static"],
-    template_folder=configs[environ.get("FLASK_ENV")]["server"]["template"],
+    static_folder=getConfig()["static"],
+    template_folder=getConfig()["template"],
 )
 Debug(app)
 CORS(app)
@@ -40,15 +45,13 @@ socketio = SocketIO(app, async_mode="eventlet")
 # App routes
 @app.route("/")
 def index():
-    config_json_string = json.dumps(configs[environ.get("FLASK_ENV")]["client"])
+    config_json_string = json.dumps(getConfig(platform="client"))
     return render_template("index.html", config=config_json_string)
 
 
 @app.route("/<path:path>")
 def indexPath(path):
-    return send_from_directory(
-        configs[environ.get("FLASK_ENV")]["server"]["template"], path
-    )
+    return send_from_directory(getConfig()["template"], path)
 
 
 # Socket connections
