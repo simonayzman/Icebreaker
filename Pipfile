@@ -13,6 +13,8 @@ flask-cors = "*"
 flask-debug = "*"
 eventlet = "*"
 gunicorn = "*"
+requests = "*"
+python-firebase = "*"
 
 [requires]
 python_version = "3.7"
