@@ -13,8 +13,8 @@ flask-cors = "*"
 flask-debug = "*"
 eventlet = "*"
 gunicorn = "*"
-requests = "*"
-python-firebase = "*"
+firebase-admin = "*"
+google-cloud-firestore = "*"
 
 [requires]
 python_version = "3.7"
