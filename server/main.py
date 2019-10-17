@@ -13,29 +13,25 @@ configs = {
             "api": "http://localhost",
             "port": 8000,
         },
-        "server": {
-            "static": "../client/build",
-            "template": "../client/build",
-        },
+        "server": {"static": "../client/build", "template": "../client/build"},
     },
     "production": {
         "client": {
             "token": "Hello PROD Flask",
             "api": "https://deep-dive-072193.herokuapp.com",
-            "port": environ.get('PORT'),
+            "port": environ.get("PORT"),
         },
         "server": {
             "static": "../client/build/static",
             "template": "../client/build",
         },
     },
-   
 }
 
 app = Flask(
     __name__,
-    static_folder=configs[environ.get('FLASK_ENV')]['server']["static"],
-    template_folder=configs[environ.get('FLASK_ENV')]['server']["template"],
+    static_folder=configs[environ.get("FLASK_ENV")]["server"]["static"],
+    template_folder=configs[environ.get("FLASK_ENV")]["server"]["template"],
 )
 Debug(app)
 CORS(app)
@@ -44,31 +40,38 @@ socketio = SocketIO(app, async_mode="eventlet")
 # App routes
 @app.route("/")
 def index():
-    config_json_string = json.dumps(configs[environ.get('FLASK_ENV')]['client'])
+    config_json_string = json.dumps(configs[environ.get("FLASK_ENV")]["client"])
     return render_template("index.html", config=config_json_string)
+
 
 @app.route("/<path:path>")
 def indexPath(path):
-    return send_from_directory(configs[environ.get('FLASK_ENV')]['server']["template"], path)
+    return send_from_directory(
+        configs[environ.get("FLASK_ENV")]["server"]["template"], path
+    )
+
 
 # Socket connections
-@socketio.on('connect')
+@socketio.on("connect")
 def on_connect():
-    print('Socket connected on the back-end.')
+    print("Socket connected on the back-end.")
 
-@socketio.on('client_request')
+
+@socketio.on("client_request")
 def on_client_request(data):
-    print(f'client request: {data}')
+    print(f"client request: {data}")
 
-@socketio.on('join_room')
+
+@socketio.on("join_room")
 def on_join(data):
-    print('room joined')
-    room = data['room']
+    print("room joined")
+    room = data["room"]
     join_room(room)
-    emit('open_room', {'room': room}, broadcast=True)
+    emit("open_room", {"room": room}, broadcast=True)
 
-@socketio.on('send_message')
+
+@socketio.on("send_message")
 def on_chat_sent(data):
-    print('message sent')
-    room = data['room']
-    emit('message_sent', data, room=room)
+    print("message sent")
+    room = data["room"]
+    emit("message_sent", data, room=room)
