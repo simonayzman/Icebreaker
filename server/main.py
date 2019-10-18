@@ -1,10 +1,32 @@
 from os import environ
-
 from flask import Flask, render_template, send_from_directory
 from flask_socketio import SocketIO, emit, join_room
 from flask_cors import CORS
 from flask_debug import Debug
 import json
+
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+from dotenv import load_dotenv
+
+load_dotenv()
+
+cred_val = environ.get("GOOGLE_CREDENTIALS")
+if cred_val == None:
+    print("Didn't find environment credentials! Reverting to local file.")
+    cred = credentials.Certificate("./keys.json")
+else:
+    print("Found environment credentials! Converting to json.")
+    cred_json = json.loads(cred_val)
+    cred = credentials.Certificate(cred_json)
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()
+users_ref = db.collection("users")
+docs = users_ref.stream()
+for doc in docs:
+    print(f"{doc.id} => {doc.to_dict()}")
 
 configs = {
     "development": {
