@@ -15,6 +15,7 @@ eventlet = "*"
 gunicorn = "*"
 firebase-admin = "*"
 google-cloud-firestore = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"
