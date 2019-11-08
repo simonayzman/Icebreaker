@@ -3,6 +3,8 @@ from flask import Flask, render_template, send_from_directory
 from flask_socketio import SocketIO, emit, join_room
 from flask_cors import CORS
 from flask_debug import Debug
+from datetime import datetime
+from uuid import uuid4
 import json
 
 import firebase_admin
@@ -21,12 +23,9 @@ else:
     cred_json = json.loads(cred_val)
     cred = credentials.Certificate(cred_json)
 firebase_admin.initialize_app(cred)
-
 db = firestore.client()
 users_ref = db.collection("users")
-docs = users_ref.stream()
-for doc in docs:
-    print(f"{doc.id} => {doc.to_dict()}")
+rooms_ref = db.collection("rooms")
 
 configs = {
     "development": {
@@ -82,21 +81,26 @@ def on_connect():
     print("Socket connected on the back-end.")
 
 
-@socketio.on("client_request")
-def on_client_request(data):
-    print(f"client request: {data}")
-
-
 @socketio.on("join_room")
-def on_join(data):
-    print("room joined")
-    room = data["room"]
-    join_room(room)
-    emit("open_room", {"room": room}, broadcast=True)
+def on_client_request(data):
+    print(f"Joining room with data: {data}")
+    rooms_ref.document(data["room"]).set(data)
+    emit(
+        "join_room_success",
+        {"success": True, "time": datetime.now().strftime("%H:%M:%S")},
+    )
 
 
-@socketio.on("send_message")
-def on_chat_sent(data):
-    print("message sent")
-    room = data["room"]
-    emit("message_sent", data, room=room)
+# @socketio.on("join_room")
+# def on_join(data):
+#     print("room joined")
+#     room = data["room"]
+#     join_room(room)
+#     emit("open_room", {"room": room}, broadcast=True)
+
+
+# @socketio.on("send_message")
+# def on_chat_sent(data):
+#     print("message sent")
+#     room = data["room"]
+#     emit("message_sent", data, room=room)
