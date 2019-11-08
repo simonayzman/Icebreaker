@@ -19,14 +19,43 @@ export default class App extends Component {
   constructor() {
     super();
     this.state = {
-      room: '',
+      userId: null,
+      room: null,
     };
   }
 
   componentDidMount() {
+    this.hydrateUserId();
     socket.on('connect', () => console.log('Socket connected on the front-end.'));
     socket.on('join_room_success', data => console.log('Successfully joined room: ', data));
   }
+
+  generateUserId = length => {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  };
+
+  hydrateUserId = () => {
+    try {
+      const value = localStorage.getItem('user-id');
+      if (value !== null) {
+        console.log('Hydrating user id: ', value);
+        this.setState({ userId: value });
+      } else {
+        const newId = this.generateUserId(10);
+        console.log('Setting new user id: ', newId);
+        localStorage.setItem('user-id', newId);
+        this.setState({ userId: newId });
+      }
+    } catch (error) {
+      console.log('Local storage error: ', error);
+    }
+  };
 
   onSubmitRoom = event => {
     socket.emit('join_room', {
