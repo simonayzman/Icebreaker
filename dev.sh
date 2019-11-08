@@ -1,1 +1,1 @@
-FLASK_ENV=development gunicorn --worker-class eventlet -w 1 --chdir ./server main:app
+FLASK_ENV=development gunicorn --worker-class eventlet -w 1 --chdir ./server main:app --reload --graceful-timeout 1
