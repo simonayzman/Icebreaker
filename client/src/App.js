@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import io from 'socket.io-client';
 import keymirror from 'keymirror';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import HomeScreen from './containers/HomeScreen';
+
 import './styles/App.css';
 
 const CONFIG = window.config || { token: 'Hello DEV Flask', api: 'http://localhost', port: 8000 };
@@ -80,6 +84,16 @@ export default class App extends Component {
     this.setState({ room: event.target.value });
   };
 
+  onStartCreateRoom = () => {
+    console.log('Starting room creation flow!');
+    // navigation.navigate('SignUp', { userId, roomState: 'create', questionList });
+  };
+
+  onStartJoinRoom = () => {
+    console.log('Starting room joining flow!');
+    // navigate
+  };
+
   renderQuestionPreferenceSelector() {
     return null;
   }
@@ -89,6 +103,14 @@ export default class App extends Component {
 
     let component;
     switch (page) {
+      case PAGES.Home:
+        component = (
+          <HomeScreen
+            onStartCreateRoom={this.onStartCreateRoom}
+            onStartJoinRoom={this.onStartJoinRoom}
+          />
+        );
+        break;
       default:
         component = <h1>{'NO SCREEN'}</h1>;
     }
@@ -98,13 +120,6 @@ export default class App extends Component {
         <header className="App-header">
           {component}
           <p>{CONFIG.token}</p>
-          <form onSubmit={this.onSubmitRoom}>
-            <label>
-              Room:
-              <input type="text" value={this.state.room} onChange={this.onChangeRoom} />
-            </label>
-            <input type="submit" value="Submit" />
-          </form>
         </header>
       </div>
     );
