@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
 
 import logoAsset from '../assets/iceberg3.png';
+import colors from '../constants/colors';
 
 const HomeScreenContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  background-color: '#fff';
 `;
 
 const LogoContainer = styled.div`
@@ -39,15 +39,15 @@ const LogoText = styled.div`
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: orange;
   font-family: AppleSDGothicNeo-Bold;
   font-size: 28px;
   text-align: center;
+  color: ${colors.logo};
   text-shadow: 2px 2px 4px #000000;
 `;
 
 const LogoSubtitle = styled.div`
-  color: #0288d1;
+  color: ${colors.logoSubtitle};
   font-family: AppleSDGothicNeo-Regular;
   font-size: 16px;
   text-align: center;
@@ -69,7 +69,7 @@ const ButtonContainer = styled.div`
 `;
 
 const ButtonSubtitle = styled.div`
-  color: rgb(109, 114, 120);
+  color: ${colors.subtitle};
   font-family: AppleSDGothicNeo-Light;
   font-size: 16px;
 `;
@@ -97,13 +97,13 @@ export default class HomeScreen extends Component {
             <Button block variant="primary" size="lg" onClick={this.props.onStartCreateRoom}>
               {'Create Room'}
             </Button>
-            <ButtonSubtitle>{"Let's get this party started"}</ButtonSubtitle>
+            <ButtonSubtitle>{"Let's get this party started!"}</ButtonSubtitle>
           </ButtonContainer>{' '}
           <ButtonContainer>
             <Button block variant="primary" size="lg" onClick={this.props.onStartJoinRoom}>
               {'Join Room'}
             </Button>
-            <ButtonSubtitle>{'Join the party and meet people'}</ButtonSubtitle>
+            <ButtonSubtitle>{'Make your entrance and meet some people!'}</ButtonSubtitle>
           </ButtonContainer>{' '}
         </ButtonsContainer>
       </HomeScreenContainer>
