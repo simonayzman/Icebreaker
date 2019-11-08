@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
+import keymirror from 'keymirror';
 
 import './styles/App.css';
 
@@ -15,10 +16,19 @@ const questionsConfig = {
   },
 };
 
+const PAGES = keymirror({
+  Home: null,
+  RoomIntro: null,
+  QuestionerRanker: null,
+  Room: null,
+  MatchedUser: null,
+});
+
 export default class App extends Component {
   constructor() {
     super();
     this.state = {
+      page: PAGES.Home,
       userId: null,
       room: null,
     };
@@ -75,9 +85,18 @@ export default class App extends Component {
   }
 
   render() {
+    const { page } = this.state;
+
+    let component;
+    switch (page) {
+      default:
+        component = <h1>{'NO SCREEN'}</h1>;
+    }
+
     return (
       <div className="App">
         <header className="App-header">
+          {component}
           <p>{CONFIG.token}</p>
           <form onSubmit={this.onSubmitRoom}>
             <label>
