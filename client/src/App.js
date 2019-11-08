@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 
-import './App.css';
+import './styles/App.css';
 
 const CONFIG = window.config || { token: 'Hello DEV Flask', api: 'http://localhost', port: 8000 };
 const API = `${CONFIG.api}:${CONFIG.port}`;
