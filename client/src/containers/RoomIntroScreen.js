@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
 
-import colors from '../constants/colors';
+import colors from '../lib/colors';
 
 const StyledForm = styled(Form)`
   flex: 1;
@@ -36,8 +36,10 @@ const StyledField = styled(Field)`
   }
 `;
 
-const StyledTextArea = styled(StyledField)`
-  height: 200px;
+const StyledErrorMessage = styled.div`
+  color: red;
+  text-align: left;
+  font-size: 20px;
 `;
 
 const SubmitButton = styled(Button)`
@@ -120,7 +122,7 @@ export default class RoomIntroScreen extends Component {
         : this.setState({ errorRoomCode: true });
     });
   };
-  
+
   */
 
   render() {
@@ -133,6 +135,10 @@ export default class RoomIntroScreen extends Component {
         <FieldContainer>
           <FieldLabel htmlFor="roomName">{'Room Name'}</FieldLabel>
           <StyledField name="roomName" type="text" placeholder="(optional)" />
+          <ErrorMessage
+            name="roomName"
+            render={msg => <StyledErrorMessage>{msg}</StyledErrorMessage>}
+          />
         </FieldContainer>
       );
     }
@@ -142,12 +148,16 @@ export default class RoomIntroScreen extends Component {
         initialValues={{
           roomCode: roomSelection === 'create' ? generatedRoomCode : '',
           roomName: '',
+          name: '',
+          description: '',
         }}
         validationSchema={Yup.object({
           roomCode: Yup.string()
             .min(6, 'Must be 6 characters')
             .max(6, 'Must be 6 characters')
-            .required('Required'),
+            .required('*Required'),
+          name: Yup.string().required('*Required'),
+          description: Yup.string().required('*Required'),
         })}
         onSubmit={(values, { setSubmitting }) => {
           console.log(values);
@@ -174,11 +184,19 @@ export default class RoomIntroScreen extends Component {
                 onChange={event => setFieldValue('roomCode', event.target.value.toUpperCase())}
                 disabled={roomSelection === 'create'}
               />
+              <ErrorMessage
+                name="roomCode"
+                render={msg => <StyledErrorMessage>{msg}</StyledErrorMessage>}
+              />
             </FieldContainer>
             {roomNameInput}
             <FieldContainer>
               <FieldLabel htmlFor="name">Your Name</FieldLabel>
               <StyledField name="name" autoCorrect="off" />
+              <ErrorMessage
+                name="name"
+                render={msg => <StyledErrorMessage>{msg}</StyledErrorMessage>}
+              />
             </FieldContainer>
             <FieldContainer>
               <FieldLabel htmlFor="description">What do you look like?</FieldLabel>
@@ -187,8 +205,11 @@ export default class RoomIntroScreen extends Component {
                 component="textarea"
                 autoCorrect="off"
                 rows={3}
-                onChangeText={this.onChangeDescription}
                 placeholder={'e.g., Blonde. Wearing red fedora. Sizeable front teeth.'}
+              />
+              <ErrorMessage
+                name="description"
+                render={msg => <StyledErrorMessage>{msg}</StyledErrorMessage>}
               />
             </FieldContainer>
             <SubmitButton variant="primary" size="lg" type="submit" block>
