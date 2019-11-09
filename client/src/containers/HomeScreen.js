@@ -46,8 +46,8 @@ const LogoText = styled.div`
   text-shadow: 2px 2px 4px #000000;
 `;
 
-const LogoSubtitle = styled.div`
-  color: ${colors.logoSubtitle};
+const Tagline = styled.div`
+  color: ${colors.tagline};
   font-family: AppleSDGothicNeo-Regular;
   font-size: 16px;
   text-align: center;
@@ -89,8 +89,8 @@ export default class HomeScreen extends Component {
             <LogoImage src={logoAsset} resizeMode="contain" />
             <LogoText>{'Icebreaker'}</LogoText>
           </Logo>
-          <LogoSubtitle>{'The easy way to break the ice'}</LogoSubtitle>
-          <LogoSubtitle>{'and make better connections'}</LogoSubtitle>
+          <Tagline>{'The easy way to break the ice'}</Tagline>
+          <Tagline>{'and make better connections'}</Tagline>
         </LogoContainer>
         <ButtonsContainer>
           <ButtonContainer>
