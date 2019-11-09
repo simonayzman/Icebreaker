@@ -1,29 +1,24 @@
-import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
-import { StackActions, NavigationActions } from 'react-navigation';
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  AsyncStorage,
-  TextInput,
-} from 'react-native';
-import {
-  Header,
-  Button,
-  Overlay,
-  Input,
-  Divider,
-  Icon,
-} from 'react-native-elements';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
-import { get_user, get_room } from '../Firestore';
+// import { StackActions, NavigationActions } from 'react-navigation';
+// import {
+//   Image,
+//   Platform,
+//   ScrollView,
+//   StyleSheet,
+//   Text,
+//   TouchableOpacity,
+//   View,
+//   AsyncStorage,
+//   TextInput,
+// } from 'react-native';
+// import { Header, Button, Overlay, Input, Divider, Icon } from 'react-native-elements';
 
-export default class SignUpScreen extends Component {
+// import { get_user, get_room } from '../Firestore';
+
+export default class RoomIntroScreen extends Component {
   constructor() {
     super();
     this.state = {
@@ -37,6 +32,8 @@ export default class SignUpScreen extends Component {
     };
   }
 
+  /*
+
   componentDidMount() {
     const { navigation } = this.props;
     const roomSelectState = navigation.getParam('roomState', 'join');
@@ -45,16 +42,7 @@ export default class SignUpScreen extends Component {
     }
   }
 
-  generateRoomCode = (length = 6) => {
-    var result = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  };
-
+  
   onPressEnterCardSwipe = () => {
     const { roomCode, codeName, errorRoomCode, errorCodeName } = this.state;
     console.log(`Joining room code: ${roomCode}`);
@@ -68,7 +56,7 @@ export default class SignUpScreen extends Component {
     }
   };
 
-  generateUserId = (length) => {
+  generateUserId = length => {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     var charactersLength = characters.length;
@@ -76,36 +64,35 @@ export default class SignUpScreen extends Component {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
-  }
+  };
 
-  _addUser = async (roomId) => {
-    const userId = await AsyncStorage.getItem('user-id') || this.generateUserId(10);
+  _addUser = async roomId => {
+    const userId = (await AsyncStorage.getItem('user-id')) || this.generateUserId(10);
     const { description, codeName, roomName } = this.state;
     const { questionList } = this.props.navigation.state.params;
     const roomState = this.props.navigation.getParam('roomState', 'join');
 
-    console.log("FROM SUIGN UP: ", description, codeName, questionList)
+    console.log('FROM SUIGN UP: ', description, codeName, questionList);
 
-    get_user(roomId, userId, (data) => {
-      data && data.userId == userId ?
-        this.props.navigation.replace("Room", {
-          roomId,
-          userId,
-          roomState,
-          roomName
-        })
-        :
-        this.props.navigation.replace("CardSwipe", {
-          roomId,
-          userId,
-          description,
-          codeName,
-          questionList,
-          roomState,
-          roomName
-        });
+    get_user(roomId, userId, data => {
+      data && data.userId == userId
+        ? this.props.navigation.replace('Room', {
+            roomId,
+            userId,
+            roomState,
+            roomName,
+          })
+        : this.props.navigation.replace('CardSwipe', {
+            roomId,
+            userId,
+            description,
+            codeName,
+            questionList,
+            roomState,
+            roomName,
+          });
     });
-  }
+  };
 
   onChangeRoomCode = roomCode => {
     const roomId = roomCode.trim().toUpperCase();
@@ -151,7 +138,7 @@ export default class SignUpScreen extends Component {
     this.setState({ codeName: '' });
   };
 
-  render() {
+  renderTest() {
     const { navigation } = this.props;
     const { roomCode, errorCodeName, errorRoomCode } = this.state;
     const roomSelectState = navigation.getParam('roomState', 'join');
@@ -171,14 +158,7 @@ export default class SignUpScreen extends Component {
           value={this.state.roomCode}
           onChangeText={this.onChangeRoomCode}
           errorMessage={errorRoomCode ? "Room doesn't exist!" : null}
-          rightIcon={
-            <Icon
-              name="clear"
-              size={24}
-              color="black"
-              onPress={this.onClearRoomCode}
-            />
-          }
+          rightIcon={<Icon name="clear" size={24} color="black" onPress={this.onClearRoomCode} />}
         />
       );
     } else if (roomSelectState === 'create') {
@@ -191,28 +171,36 @@ export default class SignUpScreen extends Component {
             placeholder="(optional)"
             value={this.state.roomName}
             onChangeText={this.onChangeRoomName}
-            rightIcon={
-              <Icon
-                name="clear"
-                size={24}
-                color="black"
-                onPress={this.onClearRoomName}
-              />
-            }
+            rightIcon={<Icon name="clear" size={24} color="black" onPress={this.onClearRoomName} />}
           />
         </View>
       );
-      roomCodeElement = (
-        <Text style={styles.generatedRoomCodeText}>{roomCode}</Text>
-      );
+      roomCodeElement = <Text style={styles.generatedRoomCodeText}>{roomCode}</Text>;
     }
+
+    let component = (
+      <form onSubmit={this.onSubmitRoom}>
+        <label>
+          Room:
+          <input type="text" value={this.state.room} onChange={this.onChangeRoom} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+
+    // onChangeRoomCode = roomCode => {
+    //   console.log(`Typing room code: ${roomCode}`);
+    //   this.setState({ roomCode: roomCode.trim().toUpperCase() });
+    // };
+
+    onClearRoomCode = () => {
+      console.log(`Clearing room code`);
+      this.setState({ roomCode: '' });
+    };
 
     return (
       <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}
-        >
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.textInputContainer}>
             <Text>Room Code</Text>
             {roomCodeElement}
@@ -228,12 +216,7 @@ export default class SignUpScreen extends Component {
               errorMessage={errorCodeName ? 'Please enter a nickname!' : null}
               style={{ marginLeft: 0 }}
               rightIcon={
-                <Icon
-                  name="clear"
-                  size={24}
-                  color="black"
-                  onPress={this.onClearCodeName}
-                />
+                <Icon name="clear" size={24} color="black" onPress={this.onClearCodeName} />
               }
             />
           </View>
@@ -264,9 +247,49 @@ export default class SignUpScreen extends Component {
       </View>
     );
   }
+
+  */
+
+  render() {
+    return (
+      <Formik
+        initialValues={{ firstName: '', lastName: '', email: '' }}
+        validationSchema={Yup.object({
+          firstName: Yup.string()
+            .min(15, 'Must be 15 characters or less')
+            .required('Required'),
+          lastName: Yup.string()
+            .min(20, 'Must be 20 characters or less')
+            .required('Required'),
+          email: Yup.string()
+            .email('Invalid email addresss`')
+            .required('Required'),
+        })}
+        onSubmit={(values, { setSubmitting }) => {
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            setSubmitting(false);
+          }, 400);
+        }}
+      >
+        <Form>
+          <label htmlFor="firstName">First Name</label>
+          <Field id="firstName" type="text" />
+          <ErrorMessage name="firstName" />
+          <label htmlFor="lastName">Last Name</label>
+          <Field id="lastName" type="text" />
+          <ErrorMessage name="firstName" />
+          <label htmlFor="email">Email Address</label>
+          <Field id="email" type="email" />
+          <ErrorMessage name="firstName" />
+          <button type="submit">Submit</button>
+        </Form>
+      </Formik>
+    );
+  }
 }
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -290,4 +313,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'gray',
   },
-});
+};
