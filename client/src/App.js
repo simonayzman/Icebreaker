@@ -62,27 +62,10 @@ export default class App extends Component {
     }
   };
 
-  onSubmitRoom = event => {
-    socket.emit('join_room', {
-      room: this.state.room,
-      user: window.location.href,
-      timestamp: Date.now(),
-    });
-    event.preventDefault(); // prevent page reload
-  };
-
-  onChangeRoom = event => {
-    this.setState({ room: event.target.value });
-  };
-
-  onStartCreateRoom = () => {
-    console.log('Starting room creation flow!');
-    this.setState({ page: PAGES.RoomIntro, roomSelection: 'create' });
-  };
-
-  onStartJoinRoom = () => {
-    console.log('Starting room joining flow!');
-    this.setState({ page: PAGES.RoomIntro, roomSelection: 'join' });
+  onJoinRoom = data => {
+    const { userId } = this.state;
+    const { roomCode, name, description } = data;
+    socket.emit('join_room', { roomCode, user: { userId, name, description } });
   };
 
   renderQuestionPreferenceSelector() {
@@ -97,8 +80,10 @@ export default class App extends Component {
       case PAGES.Home:
         component = (
           <HomeScreen
-            onStartCreateRoom={this.onStartCreateRoom}
-            onStartJoinRoom={this.onStartJoinRoom}
+            onStartCreateRoom={() =>
+              this.setState({ page: PAGES.RoomIntro, roomSelection: 'create' })
+            }
+            onStartJoinRoom={() => this.setState({ page: PAGES.RoomIntro, roomSelection: 'join' })}
           />
         );
         break;
@@ -108,6 +93,7 @@ export default class App extends Component {
             userId={userId}
             roomSelection={roomSelection}
             onGoBackToHomeScreen={() => this.setState({ page: PAGES.Home })}
+            onJoinRoom={this.onJoinRoom}
           />
         );
         break;
