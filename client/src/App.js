@@ -53,9 +53,10 @@ export default class App extends Component {
         this.setState({ userId: value });
       } else {
         const newId = uuid();
-        console.log('Setting new user id: ', newId);
-        localStorage.setItem('user-id', newId);
-        this.setState({ userId: newId });
+        const modifiedId = newId.replace(/\W/g, '');
+        console.log('Setting new user id: ', modifiedId);
+        localStorage.setItem('user-id', modifiedId);
+        this.setState({ userId: modifiedId });
       }
     } catch (error) {
       console.log('Local storage error: ', error);
