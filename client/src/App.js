@@ -112,7 +112,13 @@ export default class App extends Component {
         );
         break;
       case PAGES.RoomIntro:
-        component = <RoomIntroScreen userId={userId} roomSelection={roomSelection} />;
+        component = (
+          <RoomIntroScreen
+            userId={userId}
+            roomSelection={roomSelection}
+            onGoBackToHomeScreen={() => this.setState({ page: PAGES.Home })}
+          />
+        );
         break;
       default:
         component = <h1>{'NO SCREEN'}</h1>;
@@ -121,8 +127,8 @@ export default class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          {component}
           <p>{CONFIG.token}</p>
+          {component}
         </header>
       </div>
     );
