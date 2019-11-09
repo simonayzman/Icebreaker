@@ -40,7 +40,7 @@ configs = {
         "client": {
             "token": "Hello PROD Flask",
             "api": "https://deep-dive-072193.herokuapp.com",
-            "port": environ.get("PORT"),
+            # "port": environ.get("PORT"),
         },
         "server": {
             "static": "../client/build/static",
