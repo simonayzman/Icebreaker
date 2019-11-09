@@ -3,4 +3,4 @@ export const CONFIG = window.config || {
   api: 'http://localhost',
   port: 8000,
 };
-export const API = `${CONFIG.api}:${CONFIG.port}`;
+export const API = `${CONFIG.api}${CONFIG.port ? `:${CONFIG.port}` : ''}`;
