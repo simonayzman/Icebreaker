@@ -1,28 +1,54 @@
 import React, { Component } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import styled from 'styled-components';
+import { Button } from 'react-bootstrap';
 
-// import { StackActions, NavigationActions } from 'react-navigation';
-// import {
-//   Image,
-//   Platform,
-//   ScrollView,
-//   StyleSheet,
-//   Text,
-//   TouchableOpacity,
-//   View,
-//   AsyncStorage,
-//   TextInput,
-// } from 'react-native';
-// import { Header, Button, Overlay, Input, Divider, Icon } from 'react-native-elements';
+import colors from '../constants/colors';
 
-// import { get_user, get_room } from '../Firestore';
+const StyledForm = styled(Form)`
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FieldContainer = styled.div`
+  width: 100%;
+  margin-bottom: 20px;
+`;
+
+const FieldLabel = styled.div`
+  font-size: 20px;
+  color: ${colors.label};
+  text-align: left;
+`;
+
+const StyledField = styled(Field)`
+  width: 100%;
+  font-size: 20px;
+  padding: 5px 10px;
+
+  :disabled {
+    color: #aaa;
+  }
+`;
+
+const StyledTextArea = styled(StyledField)`
+  height: 200px;
+`;
+
+const SubmitButton = styled(Button)`
+  margin-top: 20px;
+`;
 
 export default class RoomIntroScreen extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      roomCode: '',
+      generatedRoomCode: props.roomSelection === 'create' ? this.generateRoomCode() : '',
       roomName: '',
       codeName: '',
       description: '',
@@ -32,20 +58,21 @@ export default class RoomIntroScreen extends Component {
     };
   }
 
-  /*
-
-  componentDidMount() {
-    const { navigation } = this.props;
-    const roomSelectState = navigation.getParam('roomState', 'join');
-    if (roomSelectState === 'create') {
-      this.setState({ roomCode: this.generateRoomCode() });
+  generateRoomCode = (length = 6) => {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-  }
+    return result;
+  };
 
-  
-  onPressEnterCardSwipe = () => {
+  onSubmitRoomDetails = () => {
+    // this.props.onSubmitRoomDetails();
     const { roomCode, codeName, errorRoomCode, errorCodeName } = this.state;
     console.log(`Joining room code: ${roomCode}`);
+    return;
 
     if (roomCode && codeName && !errorRoomCode && !errorCodeName) {
       this._addUser(roomCode);
@@ -56,16 +83,7 @@ export default class RoomIntroScreen extends Component {
     }
   };
 
-  generateUserId = length => {
-    var result = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  };
-
+  /*
   _addUser = async roomId => {
     const userId = (await AsyncStorage.getItem('user-id')) || this.generateUserId(10);
     const { description, codeName, roomName } = this.state;
@@ -94,14 +112,6 @@ export default class RoomIntroScreen extends Component {
     });
   };
 
-  onChangeRoomCode = roomCode => {
-    const roomId = roomCode.trim().toUpperCase();
-    console.log(`Typing room code: ${roomId}`);
-    this.setState({ roomCode: roomId });
-
-    if (roomCode.length > 5) this._checkRoom(roomId);
-  };
-
   _checkRoom = async roomId => {
     await get_room(roomId, data => {
       console.log('Found room: ', data);
@@ -110,207 +120,83 @@ export default class RoomIntroScreen extends Component {
         : this.setState({ errorRoomCode: true });
     });
   };
-
-  onChangeRoomName = roomName => {
-    this.setState({ roomName });
-  };
-
-  onChangeCodeName = codeName => {
-    this.setState({ codeName, errorCodeName: false });
-  };
-
-  onChangeDescription = description => {
-    this.setState({ description });
-  };
-
-  onClearRoomName = () => {
-    console.log(`Clearing room name`);
-    this.setState({ roomName: '' });
-  };
-
-  onClearRoomCode = () => {
-    console.log(`Clearing room code`);
-    this.setState({ roomCode: '' });
-  };
-
-  onClearCodeName = () => {
-    console.log(`Clearing room code`);
-    this.setState({ codeName: '' });
-  };
-
-  renderTest() {
-    const { navigation } = this.props;
-    const { roomCode, errorCodeName, errorRoomCode } = this.state;
-    const roomSelectState = navigation.getParam('roomState', 'join');
-
-    let roomNameElement;
-    let roomCodeElement;
-    if (roomSelectState === 'join') {
-      roomNameElement = null;
-      roomCodeElement = (
-        <Input
-          autoCorrect={false}
-          autoCapitalize="characters"
-          maxLength={6}
-          containerStyle={{ padding: 0 }}
-          style={{ padding: 0 }}
-          placeholder="Enter 6-letter event code"
-          value={this.state.roomCode}
-          onChangeText={this.onChangeRoomCode}
-          errorMessage={errorRoomCode ? "Room doesn't exist!" : null}
-          rightIcon={<Icon name="clear" size={24} color="black" onPress={this.onClearRoomCode} />}
-        />
-      );
-    } else if (roomSelectState === 'create') {
-      roomNameElement = (
-        <View style={styles.textInputContainer}>
-          <Text>{'Room Name'}</Text>
-          <Input
-            containerStyle={{ padding: 0 }}
-            style={{ padding: 0 }}
-            placeholder="(optional)"
-            value={this.state.roomName}
-            onChangeText={this.onChangeRoomName}
-            rightIcon={<Icon name="clear" size={24} color="black" onPress={this.onClearRoomName} />}
-          />
-        </View>
-      );
-      roomCodeElement = <Text style={styles.generatedRoomCodeText}>{roomCode}</Text>;
-    }
-
-    let component = (
-      <form onSubmit={this.onSubmitRoom}>
-        <label>
-          Room:
-          <input type="text" value={this.state.room} onChange={this.onChangeRoom} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-    );
-
-    // onChangeRoomCode = roomCode => {
-    //   console.log(`Typing room code: ${roomCode}`);
-    //   this.setState({ roomCode: roomCode.trim().toUpperCase() });
-    // };
-
-    onClearRoomCode = () => {
-      console.log(`Clearing room code`);
-      this.setState({ roomCode: '' });
-    };
-
-    return (
-      <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.textInputContainer}>
-            <Text>Room Code</Text>
-            {roomCodeElement}
-          </View>
-          {roomNameElement}
-          <View style={styles.textInputContainer}>
-            <Text>Your "Code Name"</Text>
-            <Input
-              autoCorrect={false}
-              placeholder="e.g., Superman999"
-              value={this.state.codeName}
-              onChangeText={this.onChangeCodeName}
-              errorMessage={errorCodeName ? 'Please enter a nickname!' : null}
-              style={{ marginLeft: 0 }}
-              rightIcon={
-                <Icon name="clear" size={24} color="black" onPress={this.onClearCodeName} />
-              }
-            />
-          </View>
-          <View style={styles.textInputContainer}>
-            <Text>What do you look like?</Text>
-            <TextInput
-              onChangeText={this.onChangeDescription}
-              value={this.state.description}
-              multiline
-              placeholder={"I'm the coolest looking person in the room"}
-              style={{
-                height: 200,
-                marginTop: 10,
-                borderRadius: 5,
-                borderColor: 'grey',
-                borderWidth: 1,
-                padding: 15,
-                paddingTop: 10,
-              }}
-            />
-          </View>
-        </ScrollView>
-        <Button
-          style={styles.joinButton}
-          onPress={this.onPressEnterCardSwipe}
-          title="Start meeting new people!"
-        />
-      </View>
-    );
-  }
-
+  
   */
 
   render() {
+    const { userId, roomSelection } = this.props;
+    const { generatedRoomCode, roomCode, errorCodeName, errorRoomCode } = this.state;
+
+    let roomNameInput = null;
+    if (roomSelection === 'create') {
+      roomNameInput = (
+        <FieldContainer>
+          <FieldLabel htmlFor="roomName">{'Room Name'}</FieldLabel>
+          <StyledField name="roomName" type="text" placeholder="(optional)" />
+        </FieldContainer>
+      );
+    }
+
     return (
       <Formik
-        initialValues={{ firstName: '', lastName: '', email: '' }}
+        initialValues={{
+          roomCode: roomSelection === 'create' ? generatedRoomCode : '',
+          roomName: '',
+        }}
         validationSchema={Yup.object({
-          firstName: Yup.string()
-            .min(15, 'Must be 15 characters or less')
-            .required('Required'),
-          lastName: Yup.string()
-            .min(20, 'Must be 20 characters or less')
-            .required('Required'),
-          email: Yup.string()
-            .email('Invalid email addresss`')
+          roomCode: Yup.string()
+            .min(6, 'Must be 6 characters')
+            .max(6, 'Must be 6 characters')
             .required('Required'),
         })}
         onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
+          console.log(values);
+          this.onSubmitRoomDetails();
+          // setTimeout(() => {
+          //   alert(JSON.stringify(values, null, 2));
+          //   setSubmitting(false);
+          // }, 400);
         }}
       >
-        <Form>
-          <label htmlFor="firstName">First Name</label>
-          <Field id="firstName" type="text" />
-          <ErrorMessage name="firstName" />
-          <label htmlFor="lastName">Last Name</label>
-          <Field id="lastName" type="text" />
-          <ErrorMessage name="firstName" />
-          <label htmlFor="email">Email Address</label>
-          <Field id="email" type="email" />
-          <ErrorMessage name="firstName" />
-          <button type="submit">Submit</button>
-        </Form>
+        {({ setFieldValue }) => (
+          <StyledForm>
+            <FieldContainer>
+              <FieldLabel htmlFor="roomCode">{`Room Code${
+                roomSelection === 'create' ? ' (autogenerated)' : ''
+              }`}</FieldLabel>
+              <StyledField
+                name="roomCode"
+                type="text"
+                autoCorrect="off"
+                autoCapitalize="characters"
+                maxLength={6}
+                placeholder="Enter 6-letter event code"
+                onChange={event => setFieldValue('roomCode', event.target.value.toUpperCase())}
+                disabled={roomSelection === 'create'}
+              />
+            </FieldContainer>
+            {roomNameInput}
+            <FieldContainer>
+              <FieldLabel htmlFor="name">Your Name</FieldLabel>
+              <StyledField name="name" autoCorrect="off" />
+            </FieldContainer>
+            <FieldContainer>
+              <FieldLabel htmlFor="description">What do you look like?</FieldLabel>
+              <StyledField
+                name="description"
+                component="textarea"
+                autoCorrect="off"
+                rows={3}
+                onChangeText={this.onChangeDescription}
+                placeholder={'e.g., Blonde. Wearing red fedora. Sizeable front teeth.'}
+              />
+            </FieldContainer>
+            <SubmitButton variant="primary" size="lg" type="submit" block>
+              {"Let's do this!"}
+            </SubmitButton>
+          </StyledForm>
+        )}
       </Formik>
     );
   }
 }
-
-const styles = {
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-  title: {},
-  joinButton: {
-    position: 'absolute',
-    bottom: 25,
-    left: 25,
-    right: 25,
-  },
-  textInputContainer: {
-    marginTop: 30,
-  },
-  textInput: {},
-  generatedRoomCodeText: {
-    paddingLeft: 8,
-    paddingTop: 5,
-    fontSize: 16,
-    color: 'gray',
-  },
-};
