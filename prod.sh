@@ -1,1 +1,1 @@
-FLASK_ENV=production gunicorn --worker-class eventlet -w 1 --chdir ./server main:app --reload --graceful-timeout 1
+FLASK_ENV=production gunicorn --no-sendfile --worker-class eventlet -w 1 --chdir ./server main:app --reload --graceful-timeout 1
