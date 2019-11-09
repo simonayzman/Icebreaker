@@ -5,6 +5,7 @@ import keymirror from 'keymirror';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import HomeScreen from './containers/HomeScreen';
+import RoomIntroScreen from './containers/RoomIntroScreen';
 
 import './styles/App.css';
 
@@ -34,7 +35,8 @@ export default class App extends Component {
     this.state = {
       page: PAGES.Home,
       userId: null,
-      room: null,
+      roomCode: null,
+      roomSelection: null,
     };
   }
 
@@ -86,12 +88,12 @@ export default class App extends Component {
 
   onStartCreateRoom = () => {
     console.log('Starting room creation flow!');
-    // navigation.navigate('SignUp', { userId, roomState: 'create', questionList });
+    this.setState({ page: PAGES.RoomIntro, roomSelection: 'create' });
   };
 
   onStartJoinRoom = () => {
     console.log('Starting room joining flow!');
-    // navigate
+    this.setState({ page: PAGES.RoomIntro, roomSelection: 'join' });
   };
 
   renderQuestionPreferenceSelector() {
@@ -99,7 +101,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { page } = this.state;
+    const { page, userId, roomSelection } = this.state;
 
     let component;
     switch (page) {
@@ -110,6 +112,9 @@ export default class App extends Component {
             onStartJoinRoom={this.onStartJoinRoom}
           />
         );
+        break;
+      case PAGES.RoomIntro:
+        component = <RoomIntroScreen userId={userId} roomSelection={roomSelection} />;
         break;
       default:
         component = <h1>{'NO SCREEN'}</h1>;
