@@ -6,11 +6,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import HomeScreen from './containers/HomeScreen';
 import RoomIntroScreen from './containers/RoomIntroScreen';
+import { CONFIG } from './lib/config';
 
 import './styles/App.css';
-
-const CONFIG = window.config || { token: 'Hello DEV Flask', api: 'http://localhost', port: 8000 };
-const API = `${CONFIG.api}:${CONFIG.port}`;
 
 const socket = io();
 

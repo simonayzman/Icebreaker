@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
 
 import logoAsset from '../assets/iceberg3.png';
-import colors from '../constants/colors';
+import colors from '../lib/colors';
 
 const HomeScreenContainer = styled.div`
   display: flex;
