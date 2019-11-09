@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 
 import colors from '../lib/colors';
+import { API } from '../lib/config';
 
 const StyledForm = styled(Form)`
   flex: 1;
@@ -58,12 +59,6 @@ export default class RoomIntroScreen extends Component {
     super(props);
     this.state = {
       generatedRoomCode: props.roomSelection === 'create' ? this.generateRoomCode() : '',
-      roomName: '',
-      codeName: '',
-      description: '',
-      error: false,
-      errorCodeName: null,
-      errorRoomCode: null,
     };
   }
 
@@ -77,18 +72,23 @@ export default class RoomIntroScreen extends Component {
     return result;
   };
 
-  onSubmitRoomDetails = () => {
-    // this.props.onSubmitRoomDetails();
-    const { roomCode, codeName, errorRoomCode, errorCodeName } = this.state;
+  onSubmitRoomDetails = async (values, formik) => {
+    const { userId, roomSelection } = this.props;
+    const { roomCode, roomName, name, description } = values;
     console.log(`Joining room code: ${roomCode}`);
-    return;
 
-    if (roomCode && codeName && !errorRoomCode && !errorCodeName) {
-      this._addUser(roomCode);
-    } else if (!roomCode) {
-      return this.setState({ errorRoomCode: true });
-    } else if (!codeName) {
-      return this.setState({ errorCodeName: true });
+    if (roomSelection === 'create') {
+      const response = await fetch(`${API}/createRoom?roomCode=${roomCode}`);
+      const responseJson = await response.json();
+    } else if (roomSelection === 'join') {
+      const response = await fetch(`${API}/checkRoom?roomCode=${roomCode}`);
+      const responseJson = await response.json();
+      const { error } = responseJson;
+      if (error === true) {
+        formik.setFieldError('roomCode', 'Room code does not exist!');
+      }
+
+      this.props.onJoinRoom(values);
     }
   };
 
@@ -166,14 +166,7 @@ export default class RoomIntroScreen extends Component {
           name: Yup.string().required('*Required'),
           description: Yup.string().required('*Required'),
         })}
-        onSubmit={(values, { setSubmitting }) => {
-          console.log(values);
-          this.onSubmitRoomDetails();
-          // setTimeout(() => {
-          //   alert(JSON.stringify(values, null, 2));
-          //   setSubmitting(false);
-          // }, 400);
-        }}
+        onSubmit={this.onSubmitRoomDetails}
       >
         {({ setFieldValue }) => (
           <StyledForm>
