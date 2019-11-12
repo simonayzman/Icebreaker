@@ -30,7 +30,7 @@ rooms_ref = db.collection("rooms")
 configs = {
     "development": {
         "client": {
-            "token": "Hello DEV Flask",
+            "token": "((( DEV ENV )))",
             "api": "http://localhost",
             "port": 8000,
         },
@@ -38,7 +38,7 @@ configs = {
     },
     "production": {
         "client": {
-            "token": "Hello PROD Flask",
+            "token": "((( PROD ENV )))",
             "api": "https://deep-dive-072193.herokuapp.com",
             # "port": environ.get("PORT"),
         },
