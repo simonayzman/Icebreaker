@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import io from 'socket.io-client';
 import keymirror from 'keymirror';
 import uuid from 'uuid/v4';
+import styled from 'styled-components';
+import { IoMdArrowRoundBack } from 'react-icons/io';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -27,6 +29,12 @@ const PAGES = keymirror({
   Room: null,
   MatchedUser: null,
 });
+
+const BackButtonContainer = styled.div`
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+`;
 
 export default class App extends Component {
   constructor() {
@@ -69,12 +77,30 @@ export default class App extends Component {
     socket.emit('join_room', { roomCode, user: { userId, name, description } });
   };
 
+  onBack = () => {
+    const { page } = this.state;
+
+    switch (page) {
+      case PAGES.RoomIntro:
+        this.setState({ page: PAGES.Home });
+        break;
+      default:
+        break;
+    }
+  };
+
   renderQuestionPreferenceSelector() {
     return null;
   }
 
   render() {
     const { page, userId, roomSelection } = this.state;
+
+    const backButton = (
+      <BackButtonContainer onClick={this.onBack}>
+        <IoMdArrowRoundBack size="35px" />
+      </BackButtonContainer>
+    );
 
     let component;
     switch (page) {
@@ -107,6 +133,7 @@ export default class App extends Component {
         <header className="App-header">
           <p>{CONFIG.token}</p>
           {component}
+          {page !== PAGES.Home ? backButton : null}
         </header>
       </div>
     );

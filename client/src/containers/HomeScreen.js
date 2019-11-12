@@ -66,6 +66,7 @@ const ButtonsContainer = styled.div`
 
 const ButtonContainer = styled.div`
   align-items: center;
+  margin-bottom: 20px;
 `;
 
 const ButtonSubtitle = styled.div`

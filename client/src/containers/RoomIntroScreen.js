@@ -3,7 +3,6 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
-import { IoMdArrowRoundBack } from 'react-icons/io';
 
 import colors from '../lib/colors';
 import { API } from '../lib/config';
@@ -46,12 +45,6 @@ const StyledErrorMessage = styled.div`
 
 const SubmitButton = styled(Button)`
   margin-top: 20px;
-`;
-
-const BackButtonContainer = styled.div`
-  position: absolute;
-  left: 20px;
-  bottom: 20px;
 `;
 
 export default class RoomIntroScreen extends Component {
@@ -215,9 +208,6 @@ export default class RoomIntroScreen extends Component {
             <SubmitButton variant="primary" size="lg" type="submit" block>
               {"Let's do this!"}
             </SubmitButton>
-            <BackButtonContainer onClick={this.props.onGoBackToHomeScreen}>
-              <IoMdArrowRoundBack size="35px" />
-            </BackButtonContainer>
           </StyledForm>
         )}
       </Formik>
