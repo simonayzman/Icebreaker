@@ -1,6 +1,4 @@
-<img src="./client/src/assets/iceberg3.png" height="300px" width="auto" />
-
-# Icebreaker
+# <img src="./client/src/assets/iceberg3.png" height="50px" /> Icebreaker
 
 ## Inspiration
 
