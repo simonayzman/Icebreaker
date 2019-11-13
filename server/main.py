@@ -130,7 +130,7 @@ def on_connect():
 
 
 @socketio.on("join_room")
-def on_client_request(data):
+def on_join_room(data):
     print(f"Joining room: {data}")
     room_code = data["roomCode"]
     user = data["user"]
@@ -140,18 +140,9 @@ def on_client_request(data):
     emit("join_room_success", user)
 
 
-
-
-# @socketio.on("join_room")
-# def on_join(data):
-#     print("room joined")
-#     room = data["room"]
-#     join_room(room)
-#     emit("open_room", {"room": room}, broadcast=True)
-
-
-# @socketio.on("send_message")
-# def on_chat_sent(data):
-#     print("message sent")
-#     room = data["room"]
-#     emit("message_sent", data, room=room)
+@socketio.on("update_question_rankings")
+def on_update_question_rankings(data):
+    print(f"Updating question rankings: ${data}")
+    room = data["room"]
+    # Update matches logic here
+    emit("update_matches", data, room=room)
