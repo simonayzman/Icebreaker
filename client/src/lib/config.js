@@ -1,5 +1,5 @@
 export const CONFIG = window.config || {
-  token: 'Hello DEV Flask',
+  token: '((( DEFAULT DEV ENV )))',
   api: 'http://localhost',
   port: 8000,
 };

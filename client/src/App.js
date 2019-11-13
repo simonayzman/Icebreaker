@@ -15,13 +15,6 @@ import './styles/App.css';
 
 const socket = io();
 
-const questionsConfig = {
-  allQuestionIds: [],
-  questions: {
-    '1': {},
-  },
-};
-
 const PAGES = keymirror({
   Home: null,
   RoomIntro: null,
