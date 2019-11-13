@@ -68,9 +68,9 @@ export default class RoomIntroScreen extends Component {
   onSubmitRoomDetails = async (values, formik) => {
     const { roomSelection, onJoinRoom } = this.props;
     const { roomCode, roomName, userName, userDescription } = values;
-    console.log(`Joining room code: ${roomCode}`);
 
     if (roomSelection === 'create') {
+      console.log(`Attempting to create room with code: ${roomCode}`);
       const createUrl = encodeURI(`${API}/createRoom?roomCode=${roomCode}&roomName=${roomName}`);
       const response = await fetch(createUrl);
       const responseJson = await response.json();
@@ -81,6 +81,7 @@ export default class RoomIntroScreen extends Component {
         onJoinRoom({ roomCode, roomName }, { userName, userDescription });
       }
     } else if (roomSelection === 'join') {
+      console.log(`Attempting to join room with code: ${roomCode}`);
       const checkUrl = encodeURI(`${API}/checkRoom?roomCode=${roomCode}`);
       const response = await fetch(checkUrl);
       const responseJson = await response.json();
