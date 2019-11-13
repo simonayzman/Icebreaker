@@ -95,46 +95,6 @@ export default class RoomIntroScreen extends Component {
     }
   };
 
-  /*
-  _addUser = async roomId => {
-    const userId = (await AsyncStorage.getItem('user-id')) || this.generateUserId(10);
-    const { description, codeName, roomName } = this.state;
-    const { questionList } = this.props.navigation.state.params;
-    const roomState = this.props.navigation.getParam('roomState', 'join');
-
-    console.log('FROM SUIGN UP: ', description, codeName, questionList);
-
-    get_user(roomId, userId, data => {
-      data && data.userId == userId
-        ? this.props.navigation.replace('Room', {
-            roomId,
-            userId,
-            roomState,
-            roomName,
-          })
-        : this.props.navigation.replace('CardSwipe', {
-            roomId,
-            userId,
-            description,
-            codeName,
-            questionList,
-            roomState,
-            roomName,
-          });
-    });
-  };
-
-  _checkRoom = async roomId => {
-    await get_room(roomId, data => {
-      console.log('Found room: ', data);
-      data && data.roomId == roomId
-        ? this.setState({ errorRoomCode: false })
-        : this.setState({ errorRoomCode: true });
-    });
-  };
-
-  */
-
   render() {
     const { userNameHint, roomCodeHint, roomSelection } = this.props;
     const { generatedRoomCode } = this.state;
