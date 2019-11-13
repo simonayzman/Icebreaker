@@ -76,13 +76,12 @@ const ButtonSubtitle = styled.div`
 `;
 
 export default class HomeScreen extends Component {
-  constructor() {
-    super();
-    this.state = { error: false };
-  }
-
   render() {
-    const { error } = this.state;
+    const { roomNameHint, onStartCreateRoom, onStartJoinRoom } = this.props;
+    const joinRoomButtonText =
+      roomNameHint != null && roomNameHint.length > 0
+        ? `Join Room (${roomNameHint}?)`
+        : 'Join Room';
     return (
       <HomeScreenContainer>
         <LogoContainer>
@@ -95,23 +94,19 @@ export default class HomeScreen extends Component {
         </LogoContainer>
         <ButtonsContainer>
           <ButtonContainer>
-            <Button block variant="primary" size="lg" onClick={this.props.onStartCreateRoom}>
+            <Button block variant="primary" size="lg" onClick={onStartCreateRoom}>
               {'Create Room'}
             </Button>
             <ButtonSubtitle>{"Let's get this party started!"}</ButtonSubtitle>
-          </ButtonContainer>{' '}
+          </ButtonContainer>
           <ButtonContainer>
-            <Button block variant="primary" size="lg" onClick={this.props.onStartJoinRoom}>
-              {'Join Room'}
+            <Button block variant="primary" size="lg" onClick={onStartJoinRoom}>
+              {joinRoomButtonText}
             </Button>
             <ButtonSubtitle>{'Make your entrance and meet some people!'}</ButtonSubtitle>
-          </ButtonContainer>{' '}
+          </ButtonContainer>
         </ButtonsContainer>
       </HomeScreenContainer>
     );
   }
 }
-
-const styles = {
-  buttonSubtitle: {},
-};

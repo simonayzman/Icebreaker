@@ -42,24 +42,31 @@ export default class App extends Component {
     this.state = {
       page: PAGES.Home,
       userId: null,
+      userName: null,
       roomCode: null,
+      roomName: null,
       roomSelection: null,
     };
   }
 
   componentDidMount() {
-    this.hydrateUserId();
+    this.hydrateFromLocalStorage();
     socket.on('connect', () => console.log('Socket connected on the front-end.'));
     socket.on('join_room_success', data => console.log('Successfully joined room: ', data));
   }
 
-  hydrateUserId = () => {
+  hydrateFromLocalStorage = () => {
     try {
-      const value = localStorage.getItem('user-id');
-      if (value !== null) {
-        console.log('Hydrating user id: ', value);
-        this.setState({ userId: value });
-      } else {
+      const userId = localStorage.getItem('user-id');
+      const userName = localStorage.getItem('user-name');
+      const roomCode = localStorage.getItem('room-code');
+      const roomName = localStorage.getItem('room-name');
+      this.setState({ userId, userName, roomCode, roomName });
+      console.log(
+        `Hydrating from local storage:\nUser ID: ${userId}\nUser Name: ${userName}\nRoom Code: ${roomCode}\nRoom Name: ${roomName}`
+      );
+
+      if (userId === null) {
         const newId = uuid();
         const modifiedId = newId.replace(/\W/g, '');
         console.log('Setting new user id: ', modifiedId);
@@ -67,14 +74,28 @@ export default class App extends Component {
         this.setState({ userId: modifiedId });
       }
     } catch (error) {
-      console.log('Local storage error: ', error);
+      console.log('Local storage hydration error: ', error);
     }
   };
 
-  onJoinRoom = data => {
+  saveUserRoom = (userName, roomCode, roomName) => {
+    try {
+      localStorage.setItem('user-name', userName);
+      localStorage.setItem('room-code', roomCode);
+      localStorage.setItem('room-name', roomName);
+    } catch (error) {
+      console.log('Local storage saving error: ', error);
+    }
+  };
+
+  onJoinRoom = (room, user) => {
     const { userId } = this.state;
-    const { roomCode, name, description } = data;
-    socket.emit('join_room', { roomCode, user: { userId, name, description } });
+    const { roomCode, roomName } = room;
+    const { userName, userDescription } = user;
+
+    socket.emit('join_room', { roomCode, user: { userId, userName, userDescription } });
+    this.setState({ userName, roomCode, roomName });
+    this.saveUserRoom(userName, roomCode, roomName);
   };
 
   onBack = () => {
@@ -94,7 +115,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { page, userId, roomSelection } = this.state;
+    const { page, userId, userName, roomSelection, roomCode, roomName } = this.state;
 
     const backButton = (
       <BackButtonContainer onClick={this.onBack}>
@@ -107,6 +128,7 @@ export default class App extends Component {
       case PAGES.Home:
         component = (
           <HomeScreen
+            roomNameHint={roomName}
             onStartCreateRoom={() =>
               this.setState({ page: PAGES.RoomIntro, roomSelection: 'create' })
             }
@@ -118,8 +140,9 @@ export default class App extends Component {
         component = (
           <RoomIntroScreen
             userId={userId}
+            userNameHint={userName}
+            roomCodeHint={roomCode}
             roomSelection={roomSelection}
-            onGoBackToHomeScreen={() => this.setState({ page: PAGES.Home })}
             onJoinRoom={this.onJoinRoom}
           />
         );

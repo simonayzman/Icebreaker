@@ -5,8 +5,10 @@ from flask_cors import CORS
 from flask_debug import Debug
 from datetime import datetime
 from uuid import uuid4
-import json
 
+import urllib
+import json
+import google
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -77,25 +79,38 @@ def indexPath(path):
 
 @app.route("/createRoom")
 def createRoomPath():
-    roomCode = request.args.get("roomCode")
-    initialData = {"users": {}, "matches": {}}
+    room_code = urllib.parse.unquote(request.args.get("roomCode"))
+    room_name = urllib.parse.unquote(request.args.get("roomName"))
+    initial_data = {
+        "meta": {"roomCode": room_code, "roomName": room_name},
+        "users": {},
+        "matches": {},
+    }
 
     response = None
     try:
-        rooms_ref.document(roomCode).set(initialData)
-        response = {"ok": True}
+        room = rooms_ref.document(room_code).get().to_dict()
+        if room is None:
+            rooms_ref.document(room_code).set(initial_data)
+            response = {"ok": True}
+        else:
+            response = {
+                "error": True,
+                "errorType": "Room already exists.",
+                "room": room,
+            }
     except:
-        response = {"error": True}
+        response = {"error": True, "errorType": "Unknown error"}
 
-    print(f"Room creation for code {roomCode} yielded response: {response}")
+    print(f"Room creation for code {room_code} yielded response: {response}")
 
     return jsonify(response)
 
 
 @app.route("/checkRoom")
 def checkRoomPath():
-    roomCode = request.args.get("roomCode")
-    room = rooms_ref.document(roomCode).get().to_dict()
+    room_code = urllib.parse.unquote(request.args.get("roomCode"))
+    room = rooms_ref.document(room_code).get().to_dict()
 
     response = None
     if room is None:
@@ -103,7 +118,7 @@ def checkRoomPath():
     else:
         response = room
 
-    print(f"Looking for room {roomCode} yielded response: {response}")
+    print(f"Looking for room {room_code} yielded response: {response}")
 
     return jsonify(response)
 
@@ -116,11 +131,12 @@ def on_connect():
 
 @socketio.on("join_room")
 def on_client_request(data):
-    print(f"Joining room with data: {data}")
-    roomCode = data["roomCode"]
+    print(f"Joining room: {data}")
+    room_code = data["roomCode"]
     user = data["user"]
-    userId = user["userId"]
-    rooms_ref.document(roomCode).update({f"users.{userId}": user})
+    user_id = user["userId"]
+    join_room(room_code, user_id)
+    rooms_ref.document(room_code).update({f"users.{user_id}": user})
     emit("join_room_success", user)
 
 

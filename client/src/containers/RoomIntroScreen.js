@@ -66,22 +66,31 @@ export default class RoomIntroScreen extends Component {
   };
 
   onSubmitRoomDetails = async (values, formik) => {
-    const { userId, roomSelection } = this.props;
-    const { roomCode, roomName, name, description } = values;
+    const { roomSelection, onJoinRoom } = this.props;
+    const { roomCode, roomName, userName, userDescription } = values;
     console.log(`Joining room code: ${roomCode}`);
 
     if (roomSelection === 'create') {
-      const response = await fetch(`${API}/createRoom?roomCode=${roomCode}`);
-      const responseJson = await response.json();
-    } else if (roomSelection === 'join') {
-      const response = await fetch(`${API}/checkRoom?roomCode=${roomCode}`);
+      const createUrl = encodeURI(`${API}/createRoom?roomCode=${roomCode}&roomName=${roomName}`);
+      const response = await fetch(createUrl);
       const responseJson = await response.json();
       const { error } = responseJson;
       if (error === true) {
-        formik.setFieldError('roomCode', 'Room code does not exist!');
+        formik.setFieldError('roomCode', 'Room already exists! Refresh page.');
+      } else {
+        onJoinRoom({ roomCode, roomName }, { userName, userDescription });
       }
-
-      this.props.onJoinRoom(values);
+    } else if (roomSelection === 'join') {
+      const checkUrl = encodeURI(`${API}/checkRoom?roomCode=${roomCode}`);
+      const response = await fetch(checkUrl);
+      const responseJson = await response.json();
+      const { error, meta } = responseJson;
+      if (error === true) {
+        formik.setFieldError('roomCode', 'Room code does not exist!');
+      } else {
+        const { roomName } = meta;
+        onJoinRoom({ roomCode, roomName }, { userName, userDescription });
+      }
     }
   };
 
@@ -126,8 +135,8 @@ export default class RoomIntroScreen extends Component {
   */
 
   render() {
-    const { userId, roomSelection } = this.props;
-    const { generatedRoomCode, roomCode, errorCodeName, errorRoomCode } = this.state;
+    const { userNameHint, roomCodeHint, roomSelection } = this.props;
+    const { generatedRoomCode } = this.state;
 
     let roomNameInput = null;
     if (roomSelection === 'create') {
@@ -146,18 +155,23 @@ export default class RoomIntroScreen extends Component {
     return (
       <Formik
         initialValues={{
-          roomCode: roomSelection === 'create' ? generatedRoomCode : '',
+          roomCode:
+            roomSelection === 'create'
+              ? generatedRoomCode
+              : roomCodeHint == null
+              ? ''
+              : roomCodeHint,
           roomName: '',
-          name: '',
-          description: '',
+          userName: userNameHint == null ? '' : userNameHint,
+          userDescription: '',
         }}
         validationSchema={Yup.object({
           roomCode: Yup.string()
             .min(6, 'Must be 6 characters')
             .max(6, 'Must be 6 characters')
             .required('*Required'),
-          name: Yup.string().required('*Required'),
-          description: Yup.string().required('*Required'),
+          userName: Yup.string().required('*Required'),
+          userDescription: Yup.string().required('*Required'),
         })}
         onSubmit={this.onSubmitRoomDetails}
       >
@@ -184,24 +198,24 @@ export default class RoomIntroScreen extends Component {
             </FieldContainer>
             {roomNameInput}
             <FieldContainer>
-              <FieldLabel htmlFor="name">Your Name</FieldLabel>
-              <StyledField name="name" autoCorrect="off" />
+              <FieldLabel htmlFor="userName">Your Name</FieldLabel>
+              <StyledField name="userName" autoCorrect="off" />
               <ErrorMessage
-                name="name"
+                name="userName"
                 render={msg => <StyledErrorMessage>{msg}</StyledErrorMessage>}
               />
             </FieldContainer>
             <FieldContainer>
-              <FieldLabel htmlFor="description">What do you look like?</FieldLabel>
+              <FieldLabel htmlFor="userDescription">What do you look like?</FieldLabel>
               <StyledField
-                name="description"
+                name="userDescription"
                 component="textarea"
                 autoCorrect="off"
                 rows={3}
                 placeholder={'e.g., Blonde. Wearing red fedora. Sizeable front teeth.'}
               />
               <ErrorMessage
-                name="description"
+                name="userDescription"
                 render={msg => <StyledErrorMessage>{msg}</StyledErrorMessage>}
               />
             </FieldContainer>
