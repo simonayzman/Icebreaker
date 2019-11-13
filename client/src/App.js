@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import HomeScreen from './containers/HomeScreen';
 import RoomIntroScreen from './containers/RoomIntroScreen';
+import QuestionRankerScreen from './containers/QuestionRankerScreen';
 import { CONFIG } from './lib/config';
 
 import './styles/App.css';
@@ -18,7 +19,7 @@ const socket = io();
 const PAGES = keymirror({
   Home: null,
   RoomIntro: null,
-  QuestionerRanker: null,
+  QuestionRanker: null,
   Room: null,
   MatchedUser: null,
 });
@@ -39,6 +40,7 @@ export default class App extends Component {
       roomCode: null,
       roomName: null,
       roomSelection: null,
+      page: PAGES.QuestionRanker,
     };
   }
 
@@ -98,6 +100,9 @@ export default class App extends Component {
       case PAGES.RoomIntro:
         this.setState({ page: PAGES.Home });
         break;
+      case PAGES.QuestionRanker:
+        this.setState({ page: PAGES.RoomIntro });
+        break;
       default:
         break;
     }
@@ -139,6 +144,9 @@ export default class App extends Component {
             onJoinRoom={this.onJoinRoom}
           />
         );
+        break;
+      case PAGES.QuestionRanker:
+        component = <QuestionRankerScreen />;
         break;
       default:
         component = <h1>{'NO SCREEN'}</h1>;

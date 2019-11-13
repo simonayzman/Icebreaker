@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, View, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
-import { Button, Text, ListItem, Icon } from 'react-native-elements';
-import Swiper from 'react-native-deck-swiper';
+// import { ScrollView, StyleSheet, View, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+// import { Button, Text, ListItem, Icon } from 'react-native-elements';
+// import Swiper from 'react-native-deck-swiper';
 
-import SAMPLE_QUESTIONS from '../constants/questions';
-import SAMPLE_MATCHES from '../constants/matches';
-import SAMPLE_USERS from '../constants/users';
-import { add_user, add_room } from '../Firestore';
+// import SAMPLE_QUESTIONS from '../constants/questions';
+// import SAMPLE_MATCHES from '../constants/matches';
+// import SAMPLE_USERS from '../constants/users';
+// import { add_user, add_room } from '../Firestore';
 
 export default class CardSwipeScreen extends Component {
+  /*
     constructor(props) {
         super(props);
         this.questionList = props.navigation.state.params.questionList;
@@ -131,42 +132,46 @@ export default class CardSwipeScreen extends Component {
             </SafeAreaView >
         );
     }
+    */
+  render() {
+    return <h2>{'QUESTION RANKER!'}</h2>;
+  }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F5FCFF',
-        padding: 10
-    },
-    card: {
-        flex: 1,
-        marginLeft: 20,
-        marginRight: 20,
-        marginBottom: 30,
-        borderRadius: 4,
-        borderWidth: 2,
-        borderColor: '#E8E8E8',
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'center',
-        backgroundColor: 'white',
-        padding: 20,
-    },
-    text: {
-        textAlign: 'left',
-        fontSize: 32,
-        backgroundColor: 'transparent',
-    },
-    joinButton: {
-        marginTop: 25,
-        alignSelf: "stretch",
-        marginLeft: 25,
-        marginRight: 25,
-        height: 50,
-        borderRadius: 5,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "blue"
-    },
-});
+const styles = {
+  container: {
+    flex: 1,
+    backgroundColor: '#F5FCFF',
+    padding: 10,
+  },
+  card: {
+    flex: 1,
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 30,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: '#E8E8E8',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: 'white',
+    padding: 20,
+  },
+  text: {
+    textAlign: 'left',
+    fontSize: 32,
+    backgroundColor: 'transparent',
+  },
+  joinButton: {
+    marginTop: 25,
+    alignSelf: 'stretch',
+    marginLeft: 25,
+    marginRight: 25,
+    height: 50,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'blue',
+  },
+};
