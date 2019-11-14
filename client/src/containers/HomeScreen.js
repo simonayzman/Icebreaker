@@ -9,6 +9,7 @@ const HomeScreenContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  width: 100%;
 `;
 
 const LogoContainer = styled.div`
