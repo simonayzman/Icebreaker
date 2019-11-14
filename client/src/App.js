@@ -41,7 +41,7 @@ export default class App extends Component {
       roomCode: null,
       roomName: null,
       roomSelection: null,
-      page: PAGES.QuestionRanker, // REMOVE
+      // page: PAGES.QuestionRanker, // REMOVE
     };
   }
 
