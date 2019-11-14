@@ -78,7 +78,7 @@ const ButtonSubtitle = styled.div`
 
 export default class HomeScreen extends Component {
   render() {
-    const { roomNameHint, onStartCreateRoom, onStartJoinRoom } = this.props;
+    const { roomNameHint, onStartCreateRoom, onStartJoinRoom, onClickLogo } = this.props;
     const joinRoomButtonText =
       roomNameHint != null && roomNameHint.length > 0
         ? `Join Room (${roomNameHint}?)`
@@ -88,7 +88,7 @@ export default class HomeScreen extends Component {
         <LogoContainer>
           <Logo>
             <LogoImage src={logoAsset} resizeMode="contain" />
-            <LogoText>{'Icebreaker'}</LogoText>
+            <LogoText onClick={onClickLogo}>{'Icebreaker'}</LogoText>
           </Logo>
           <Tagline>{'The easy way to break the ice'}</Tagline>
           <Tagline>{'and make better connections'}</Tagline>

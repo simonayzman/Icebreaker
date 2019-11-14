@@ -78,6 +78,7 @@ export default class App extends Component {
       roomSelection: null,
       navigating: false,
       navigatedBack: false,
+      devResetCount: 0,
     };
   }
 
@@ -130,6 +131,24 @@ export default class App extends Component {
     } catch (error) {
       console.log('Local storage saving error: ', error);
     }
+  };
+
+  onDevReset = () => {
+    const { devResetCount } = this.state;
+
+    let newDevResetCount = devResetCount + 1;
+    if (devResetCount === 0) {
+      localStorage.removeItem('user-question-rankings');
+      this.setState({ userQuestionRankings: null });
+    } else if (devResetCount === 1) {
+      localStorage.removeItem('user-name');
+      localStorage.removeItem('user-id');
+      localStorage.removeItem('room-code');
+      localStorage.removeItem('room-name');
+      window.location.reload();
+    }
+
+    this.setState({ devResetCount: newDevResetCount });
   };
 
   onStartCreateRoom = () => {
