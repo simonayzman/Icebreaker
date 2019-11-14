@@ -76,7 +76,8 @@ export default class App extends Component {
       roomCode: null,
       roomName: null,
       roomSelection: null,
-      page: PAGES.QuestionRanker, // REMOVE
+      navigating: false,
+      navigatedBack: false,
     };
   }
 
@@ -131,19 +132,24 @@ export default class App extends Component {
     }
   };
 
+  onStartCreateRoom = () => {
+    this.setState({ roomSelection: 'create' });
+    this.navigate(PAGES.RoomIntro);
+  };
+
+  onStartJoinRoom = () => {
+    this.setState({ roomSelection: 'join' });
+    this.navigate(PAGES.RoomIntro);
+  };
+
   onJoinRoom = (room, user) => {
     const { userId, userQuestionRankings } = this.state;
     const { roomCode, roomName } = room;
     const { userName, userDescription } = user;
 
     socket.emit('join_room', { roomCode, user: { userId, userName, userDescription } });
-    this.setState({
-      userName,
-      roomCode,
-      roomName,
-      page: userQuestionRankings == null ? PAGES.QuestionRanker : PAGES.Home,
-      page: PAGES.QuestionRanker, // REMOVE
-    });
+    this.setState({ userName, roomCode, roomName });
+    this.navigate(userQuestionRankings == null ? PAGES.QuestionRanker : PAGES.MatchedUsers);
     this.saveUserRoom(userName, roomCode, roomName);
   };
 
@@ -152,10 +158,13 @@ export default class App extends Component {
 
     switch (page) {
       case PAGES.RoomIntro:
-        this.setState({ page: PAGES.Home });
+        this.navigate(PAGES.Home, true);
         break;
       case PAGES.QuestionRanker:
-        this.setState({ page: PAGES.RoomIntro });
+        this.navigate(PAGES.Home, true);
+        break;
+      case PAGES.MatchedUsers:
+        this.navigate(PAGES.Home, true);
         break;
       default:
         break;
@@ -167,8 +176,26 @@ export default class App extends Component {
     this.saveUserQuestionRankings(questionRankings);
   };
 
+  onEnterRoom = () => {
+    this.navigate(PAGES.MatchedUsers);
+  };
+
+  navigate = (page, goingBack = false) => {
+    this.setState({ navigating: true, navigatedBack: goingBack });
+    setTimeout(() => this.setState({ page, navigating: false, navigatedBack: false }), 500);
+  };
+
   render() {
-    const { page, userId, userName, roomSelection, roomCode, roomName } = this.state;
+    const {
+      page,
+      userId,
+      userName,
+      roomSelection,
+      roomCode,
+      roomName,
+      navigating,
+      navigatedBack,
+    } = this.state;
 
     const backButton = (
       <BackButtonContainer onClick={this.onBack}>
@@ -182,10 +209,9 @@ export default class App extends Component {
         component = (
           <HomeScreen
             roomNameHint={roomName}
-            onStartCreateRoom={() =>
-              this.setState({ page: PAGES.RoomIntro, roomSelection: 'create' })
-            }
-            onStartJoinRoom={() => this.setState({ page: PAGES.RoomIntro, roomSelection: 'join' })}
+            onStartCreateRoom={this.onStartCreateRoom}
+            onStartJoinRoom={this.onStartJoinRoom}
+            onClickLogo={this.onDevReset}
           />
         );
         break;
@@ -204,7 +230,7 @@ export default class App extends Component {
         component = (
           <QuestionRankerScreen
             onRankAll={this.onRankAllQuestions}
-            onEnterRoom={() => this.setState({ page: PAGES.MatchedUsers })}
+            onEnterRoom={this.onEnterRoom}
           />
         );
         break;
@@ -216,13 +242,12 @@ export default class App extends Component {
     }
 
     return (
-      <div className="App">
-        <header className="App-header">
-          <p>{CONFIG.token}</p>
+      <AppContainer className="App">
+        <Header className="App-header" navigating={navigating} navigatedBack={navigatedBack}>
           {component}
           {page !== PAGES.Home ? backButton : null}
-        </header>
-      </div>
+        </Header>
+      </AppContainer>
     );
   }
 }
