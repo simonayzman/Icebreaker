@@ -31,7 +31,7 @@ const CardContainer = styled.div`
   bottom: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   border-radius: 10px;
   background-color: white;
@@ -154,6 +154,7 @@ export default class QuestionRankerScreen extends Component {
     const { prompt, image } = currentQuestion;
     return (
       <Swipeable
+        key={questionId}
         trackMouse
         onSwipedLeft={() => this.onRank('dislike')}
         onSwipedRight={() => this.onRank('like')}
