@@ -237,7 +237,6 @@ export default class App extends Component {
       case PAGES.RoomIntro:
         component = (
           <RoomIntroScreen
-            userId={userId}
             userNameHint={userName}
             roomCodeHint={roomCode}
             roomSelection={roomSelection}
@@ -261,8 +260,8 @@ export default class App extends Component {
     }
 
     return (
-      <AppContainer className="App">
-        <Header className="App-header" navigating={navigating} navigatedBack={navigatedBack}>
+      <AppContainer>
+        <Header navigating={navigating} navigatedBack={navigatedBack}>
           {component}
           {page !== PAGES.Home ? backButton : null}
         </Header>
