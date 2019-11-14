@@ -154,6 +154,7 @@ export default class QuestionRankerScreen extends Component {
     const { prompt, image } = currentQuestion;
     return (
       <Swipeable
+        trackMouse
         onSwipedLeft={() => this.onRank('dislike')}
         onSwipedRight={() => this.onRank('like')}
         onSwipedUp={() => this.onRank('superlike')}
