@@ -41,7 +41,7 @@ export default class App extends Component {
       roomCode: null,
       roomName: null,
       roomSelection: null,
-      page: PAGES.QuestionRanker,
+      page: PAGES.QuestionRanker, // REMOVE
     };
   }
 
@@ -58,7 +58,7 @@ export default class App extends Component {
       const userQuestionRankings = JSON.parse(localStorage.getItem('user-question-rankings'));
       const roomCode = localStorage.getItem('room-code');
       const roomName = localStorage.getItem('room-name');
-      this.setState({ userId, userName, roomCode, roomName });
+      this.setState({ userId, userName, roomCode, roomName, userQuestionRankings });
       console.log('Hydrating from local storage');
       console.log(`User ID: ${userId}`);
       console.log(`User Name: ${userName}`);
@@ -97,12 +97,18 @@ export default class App extends Component {
   };
 
   onJoinRoom = (room, user) => {
-    const { userId } = this.state;
+    const { userId, userQuestionRankings } = this.state;
     const { roomCode, roomName } = room;
     const { userName, userDescription } = user;
 
     socket.emit('join_room', { roomCode, user: { userId, userName, userDescription } });
-    this.setState({ userName, roomCode, roomName });
+    this.setState({
+      userName,
+      roomCode,
+      roomName,
+      page: userQuestionRankings == null ? PAGES.QuestionRanker : PAGES.Home,
+      page: PAGES.QuestionRanker, // REMOVE
+    });
     this.saveUserRoom(userName, roomCode, roomName);
   };
 
