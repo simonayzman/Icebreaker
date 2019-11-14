@@ -29,9 +29,6 @@ const Logo = styled.div`
 const LogoImage = styled.img`
   height: auto;
   width: 100%;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
   margin-bottom: 10px;
 `;
 
@@ -61,8 +58,6 @@ const ButtonsContainer = styled.div`
   flex-direction: column;
   width: 100%;
   justify-content: space-around;
-  padding: 20px 0;
-  margin-bottom: 30px;
 `;
 
 const ButtonContainer = styled.div`
@@ -95,16 +90,16 @@ export default class HomeScreen extends Component {
         </LogoContainer>
         <ButtonsContainer>
           <ButtonContainer>
-            <Button block variant="primary" size="lg" onClick={onStartCreateRoom}>
-              {'Create Room'}
-            </Button>
-            <ButtonSubtitle>{"Let's get this party started!"}</ButtonSubtitle>
-          </ButtonContainer>
-          <ButtonContainer>
             <Button block variant="primary" size="lg" onClick={onStartJoinRoom}>
               {joinRoomButtonText}
             </Button>
             <ButtonSubtitle>{'Make your entrance and meet some people!'}</ButtonSubtitle>
+          </ButtonContainer>
+          <ButtonContainer>
+            <Button block variant="primary" size="lg" onClick={onStartCreateRoom}>
+              {'Create Room'}
+            </Button>
+            <ButtonSubtitle>{"Let's get this party started!"}</ButtonSubtitle>
           </ButtonContainer>
         </ButtonsContainer>
       </HomeScreenContainer>
