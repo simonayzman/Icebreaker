@@ -1,18 +1,10 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import { CSSTransition } from 'react-transition-group';
-// import { ScrollView, StyleSheet, View, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
-// import { Button, Text, ListItem, Icon } from 'react-native-elements';
-// import Swiper from 'react-native-deck-swiper';
-import { Button } from 'react-bootstrap';
+import styled, { keyframes, css } from 'styled-components';
 import { GoThumbsup, GoThumbsdown } from 'react-icons/go';
 import { GiStarFormation, GiShrug } from 'react-icons/gi';
 
 import QUESTIONS, { ORDERED_QUESTIONS } from '../lib/questions';
 import colors from '../lib/colors';
-// import SAMPLE_MATCHES from '../constants/matches';
-// import SAMPLE_USERS from '../constants/users';
-// import { add_user, add_room } from '../Firestore';
 
 const QuestionRankerScreenContainer = styled.div`
   flex: 1;
@@ -23,44 +15,18 @@ const QuestionRankerScreenContainer = styled.div`
 `;
 
 const CardBody = styled.div`
-  .questionRankerCard-enter {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  .questionRankerCard-enter-active {
-    opacity: 1;
-    transform: scale(1);
-    transition: opacity 500ms, transform 500ms;
-  }
-  .questionRankerCard-exit {
-    opacity: 1;
-    transform: translateX(0) translateY(0);
-  }
-  .questionRankerCard-exit-active {
-    opacity: 0;
-    ${({ direction }) => {
-      switch (direction) {
-        case 'like': {
-          return 'transform: translateX(100px);';
-        }
-        case 'dislike': {
-          return 'transform: translateX(-100px);';
-        }
-        case 'superlike': {
-          return 'transform: translateY(-100px);';
-        }
-        case 'indifferent': {
-          return 'transform: translateY(100px);';
-        }
-      }
-    }}}
-    transition: opacity 500ms, transform 500ms;
-  }
+  position: relative;
+  flex: 1;
+  width: 100%;
+  display: flex;
 `;
 
 const CardContainer = styled.div`
-  flex: 1;
-  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -71,6 +37,37 @@ const CardContainer = styled.div`
   max-height: 60vh;
   margin-bottom: 30px;
   ${({ center }) => (center === true ? 'justify-content: center;' : '')}
+  ${({ visible }) =>
+    visible === true
+      ? `
+          transition: opacity 500ms;
+          opacity: 1;
+          transform: translateX(0) translateY(0);
+        `
+      : css`
+          transition: opacity 500ms, transform 500ms;
+          opacity: 0;
+          ${props => {
+            const { lastRanking } = props;
+            switch (lastRanking) {
+              case 'like': {
+                return 'transform: translateX(100px);';
+              }
+              case 'dislike': {
+                return 'transform: translateX(-100px);';
+              }
+              case 'superlike': {
+                return 'transform: translateY(-100px);';
+              }
+              case 'indifferent': {
+                return 'transform: translateY(100px);';
+              }
+              default: {
+                return 'DAMN;';
+              }
+            }
+          }}
+        `}
 `;
 
 const CardText = styled.div`
@@ -80,9 +77,9 @@ const CardText = styled.div`
 `;
 
 const CardImage = styled.img`
-  width: auto;
-  height: 100%;
-  max-height: 200px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 `;
 
 const ButtonsContainer = styled.div`
@@ -115,7 +112,7 @@ export default class QuestionRankerScreen extends Component {
       questionRankings: {},
       inProgressQuestionRankings: {},
       cardIndex: 0,
-      lastRank: 'like',
+      lastRanking: 'left',
     };
   }
 
@@ -142,36 +139,32 @@ export default class QuestionRankerScreen extends Component {
       this.setState({
         cardIndex: newCardIndex,
         inProgressQuestionRankings: updatedInProgressQuestionRankings,
-        lastRank: ranking,
+        lastRanking: ranking,
       });
     }
   };
 
   renderCard = (questionId, index) => {
-    const { cardIndex } = this.state;
+    const { cardIndex, lastRanking } = this.state;
     const currentQuestion = QUESTIONS[questionId];
     const { prompt, image } = currentQuestion;
     return (
-      <CSSTransition in={index === cardIndex} timeout={500} classNames="questionRankerCard">
-        <CardContainer visible={index === cardIndex}>
-          <CardImage src={require(`../assets/${image}.png`)} />
-          <CardText>{prompt}</CardText>
-        </CardContainer>
-      </CSSTransition>
+      <CardContainer visible={index === cardIndex} lastRanking={lastRanking}>
+        <CardImage src={require(`../assets/${image}.png`)} />
+        <CardText>{prompt}</CardText>
+      </CardContainer>
     );
   };
 
   render() {
-    const { cardIndex, lastRank } = this.state;
+    const { cardIndex } = this.state;
 
     let cardBody;
     if (cardIndex === ORDERED_QUESTIONS.length) {
       cardBody = (
-        <CSSTransition in={true} timeout={500} classNames="questionRankerCard">
-          <CardContainer>
-            <CardText center>{"You're done!"}</CardText>
-          </CardContainer>
-        </CSSTransition>
+        <CardContainer>
+          <CardText center>{"You're done!"}</CardText>
+        </CardContainer>
       );
     } else {
       cardBody = ORDERED_QUESTIONS.map(this.renderCard);
@@ -179,7 +172,7 @@ export default class QuestionRankerScreen extends Component {
 
     return (
       <QuestionRankerScreenContainer>
-        <CardBody lastRank={lastRank}>{cardBody}</CardBody>
+        <CardBody>{cardBody}</CardBody>
         <ButtonsContainer>
           <ButtonsRowContainer>
             <ButtonContainer onClick={() => this.onRank('superlike')}>
@@ -200,36 +193,6 @@ export default class QuestionRankerScreen extends Component {
             </ButtonContainer>
           </ButtonsRowContainer>
         </ButtonsContainer>
-        {/* {this.state.numOfQuestionsLeft > 0 && (
-          <View style={{ alignItems: 'center' }}>
-            <Text>Number of Questions Left</Text>
-            <Text>{`${this.state.numOfQuestionsLeft} / ${numOfQuestions}`}</Text>
-          </View>
-        )}
-        <View style={{ flex: 1 }}>
-          {this.state.finishedQuestions ? (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text>You're done with all your questions</Text>
-              <TouchableOpacity style={styles.joinButton} onPress={this.enterRoomScreen}>
-                <Text style={{ color: '#fff' }}>Join Room</Text>
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <Swiper
-              cardIndex={0}
-              stackSize={3}
-              useViewOverflow={false}
-              verticalSwipe={false}
-              cards={orderedQuestions}
-              renderCard={this.renderCard}
-              onSwipedLeft={cardIndex => this.onSwipe(cardIndex, 'dislike')}
-              onSwipedRight={cardIndex => this.onSwipe(cardIndex, 'like')}
-              onSwipedAll={this.onSwipedAll}
-              cardHorizontalMargin={0}
-              backgroundColor={'#F5FCFF'}
-            />
-          )}
-        </View> */}
       </QuestionRankerScreenContainer>
     );
   }
