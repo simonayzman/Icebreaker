@@ -31,7 +31,7 @@ const Header = styled.header`
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  padding: 40px 20px 60px 20px;
+  padding: 20px;
   ${({ navigating }) =>
     navigating
       ? css`
