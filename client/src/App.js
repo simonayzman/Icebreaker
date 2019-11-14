@@ -253,7 +253,12 @@ export default class App extends Component {
         );
         break;
       case PAGES.MatchedUsers:
-        component = <h2>{'Hi there!'}</h2>;
+        component = (
+          <>
+            <h2>{'Matched users screen'}</h2>
+            <h2>{'IN PROGRESS'}</h2>
+          </>
+        );
         break;
       default:
         component = <h1>{'NO SCREEN'}</h1>;
