@@ -5,4 +5,9 @@ export default {
   tagline: '#007bff',
   subtitle: 'rgb(183, 194, 207)',
   label: '#007bff',
+
+  superlike: 'blue',
+  like: 'green',
+  dislike: 'red',
+  indifferent: 'gray',
 };
