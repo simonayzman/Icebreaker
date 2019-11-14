@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import styled, { css } from 'styled-components';
 import io from 'socket.io-client';
 import keymirror from 'keymirror';
 import uuid from 'uuid/v4';
-import styled from 'styled-components';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,9 +10,44 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import HomeScreen from './containers/HomeScreen';
 import RoomIntroScreen from './containers/RoomIntroScreen';
 import QuestionRankerScreen from './containers/QuestionRankerScreen';
-import { CONFIG } from './lib/config';
+import colors from './lib/colors';
 
-import './styles/App.css';
+const AppContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: ${colors.app};
+`;
+
+const Header = styled.header`
+  position: relative;
+  min-height: 100vh;
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  padding: 40px 20px 60px 20px;
+  ${({ navigating }) =>
+    navigating
+      ? css`
+          transition: opacity 500ms, transform 500ms;
+          opacity: 0;
+          ${({ navigatedBack }) =>
+            navigatedBack === true
+              ? 'transform: translateX(100px);'
+              : 'transform: translateX(-100px);'}
+        `
+      : `
+        transition: opacity 500ms;
+        opacity: 1;
+        transform: translateX(0);
+      `}
+`;
 
 const socket = io();
 
