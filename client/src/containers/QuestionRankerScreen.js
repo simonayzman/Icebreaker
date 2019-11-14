@@ -76,12 +76,13 @@ const CardText = styled.div`
   text-align: center;
   font-size: 24px;
   color: black;
+  line-height: 1.15;
 `;
 
 const CardImage = styled.img`
-  width: 100%;
-  height: auto;
-  object-fit: contain;
+  width: auto;
+  height: 100%;
+  max-height: 50%;
 `;
 
 const ButtonsContainer = styled.div`
@@ -191,7 +192,11 @@ export default class QuestionRankerScreen extends Component {
         </ButtonsRowContainer>
         <ButtonsRowContainer>
           <ButtonContainer onClick={() => this.onRank('dislike')}>
-            <GoThumbsdown size="35px" color={colors.dislike} />
+            <GoThumbsdown
+              size="35px"
+              color={colors.dislike}
+              style={{ transform: 'scale(-1, 1)' }}
+            />
           </ButtonContainer>
           <ButtonContainer onClick={() => this.onRank('like')}>
             <GoThumbsup size="35px" color={colors.like} />
@@ -228,17 +233,3 @@ export default class QuestionRankerScreen extends Component {
     );
   }
 }
-
-const styles = {
-  joinButton: {
-    marginTop: 25,
-    alignSelf: 'stretch',
-    marginLeft: 25,
-    marginRight: 25,
-    height: 50,
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'blue',
-  },
-};
