@@ -4,16 +4,70 @@ import styled from 'styled-components';
 // import { Button, Text, ListItem, Icon } from 'react-native-elements';
 // import Swiper from 'react-native-deck-swiper';
 import { Button } from 'react-bootstrap';
+import { GoThumbsup, GoThumbsdown } from 'react-icons/go';
+import { GiStarFormation, GiShrug } from 'react-icons/gi';
 
 import QUESTIONS, { ORDERED_QUESTIONS } from '../lib/questions';
+import colors from '../lib/colors';
 // import SAMPLE_MATCHES from '../constants/matches';
 // import SAMPLE_USERS from '../constants/users';
 // import { add_user, add_room } from '../Firestore';
 
 const QuestionRankerScreenContainer = styled.div`
+  flex: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+`;
+
+const CardContainer = styled.div`
   flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  background-color: white;
+  padding: 20px;
+  max-height: 60vh;
+  margin-bottom: 30px;
+`;
+
+const CardText = styled.div`
+  text-align: center;
+  font-size: 24px;
+  color: black;
+`;
+
+const CardImage = styled.img`
+  width: auto;
+  height: 100%;
+  max-height: 200px;
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ButtonsRowContainer = styled.div`
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+`;
+
+const ButtonContainer = styled.div`
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default class QuestionRankerScreen extends Component {
@@ -36,7 +90,7 @@ export default class QuestionRankerScreen extends Component {
       [currentQuestionId]: ranking,
     };
 
-    if (newCardIndex === Object.keys(QUESTIONS).length) {
+    if (newCardIndex === ORDERED_QUESTIONS.length) {
       // Done!
       this.setState({
         questionRankings: updatedInProgressQuestionRankings,
@@ -44,7 +98,7 @@ export default class QuestionRankerScreen extends Component {
         cardIndex: newCardIndex,
       });
       onRankAll(updatedInProgressQuestionRankings);
-    } else {
+    } else if (newCardIndex < ORDERED_QUESTIONS.length) {
       // Some more left to go!
       this.setState({
         cardIndex: newCardIndex,
@@ -56,9 +110,9 @@ export default class QuestionRankerScreen extends Component {
   renderCard = cardIndex => {
     if (cardIndex === ORDERED_QUESTIONS.length) {
       return (
-        <div style={styles.card}>
-          <div style={styles.text}>{"You're done!"}</div>
-        </div>
+        <CardContainer>
+          <CardText style={styles.text}>{"You're done!"}</CardText>
+        </CardContainer>
       );
     }
 
@@ -66,10 +120,10 @@ export default class QuestionRankerScreen extends Component {
     const currentQuestion = QUESTIONS[currentQuestionId];
     const { prompt, image } = currentQuestion;
     return (
-      <div style={styles.card}>
-        <img src={require(`../assets/${image}.png`)} style={{ width: '100%', height: 'auto' }} />
-        <div style={styles.text}>{prompt}</div>
-      </div>
+      <CardContainer>
+        <CardImage src={require(`../assets/${image}.png`)} />
+        <CardText>{prompt}</CardText>
+      </CardContainer>
     );
   };
 
@@ -78,12 +132,26 @@ export default class QuestionRankerScreen extends Component {
     return (
       <QuestionRankerScreenContainer>
         <>{this.renderCard(cardIndex)}</>
-        <>
-          <Button onClick={() => this.onRank('dislike')}>{'NO'}</Button>
-          <Button onClick={() => this.onRank('indifferent')}>{'EH'}</Button>
-          <Button onClick={() => this.onRank('like')}>{'YES'}</Button>
-          <Button onClick={() => this.onRank('superlike')}>{'OH YES!'}</Button>
-        </>
+        <ButtonsContainer>
+          <ButtonsRowContainer>
+            <ButtonContainer onClick={() => this.onRank('superlike')}>
+              <GiStarFormation size="35px" color={colors.superlike} />
+            </ButtonContainer>
+          </ButtonsRowContainer>
+          <ButtonsRowContainer>
+            <ButtonContainer onClick={() => this.onRank('dislike')}>
+              <GoThumbsdown size="35px" color={colors.dislike} />
+            </ButtonContainer>
+            <ButtonContainer onClick={() => this.onRank('like')}>
+              <GoThumbsup size="35px" color={colors.like} />
+            </ButtonContainer>
+          </ButtonsRowContainer>
+          <ButtonsRowContainer>
+            <ButtonContainer onClick={() => this.onRank('indifferent')}>
+              <GiShrug size="35px" color={colors.indifferent} />
+            </ButtonContainer>
+          </ButtonsRowContainer>
+        </ButtonsContainer>
         {/* {this.state.numOfQuestionsLeft > 0 && (
           <View style={{ alignItems: 'center' }}>
             <Text>Number of Questions Left</Text>
@@ -120,30 +188,6 @@ export default class QuestionRankerScreen extends Component {
 }
 
 const styles = {
-  container: {
-    flex: 1,
-    backgroundColor: '#F5FCFF',
-    padding: 10,
-  },
-  card: {
-    flex: 1,
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 30,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: '#E8E8E8',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    backgroundColor: 'white',
-    padding: 20,
-  },
-  text: {
-    textAlign: 'left',
-    fontSize: 32,
-    color: 'black',
-  },
   joinButton: {
     marginTop: 25,
     alignSelf: 'stretch',
