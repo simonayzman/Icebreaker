@@ -1,32 +1,34 @@
 {
   "files": {
-    "main.css": "/static/css/main.ba312116.chunk.css",
-    "main.js": "/static/js/main.8376c2d9.chunk.js",
-    "main.js.map": "/static/js/main.8376c2d9.chunk.js.map",
+    "main.css": "/static/css/main.2212530a.chunk.css",
+    "main.js": "/static/js/main.066bfe97.chunk.js",
+    "main.js.map": "/static/js/main.066bfe97.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.985e6003.js",
     "runtime-main.js.map": "/static/js/runtime-main.985e6003.js.map",
     "static/css/2.0624914a.chunk.css": "/static/css/2.0624914a.chunk.css",
-    "static/js/2.18b91313.chunk.js": "/static/js/2.18b91313.chunk.js",
-    "static/js/2.18b91313.chunk.js.map": "/static/js/2.18b91313.chunk.js.map",
+    "static/js/2.8beb639e.chunk.js": "/static/js/2.8beb639e.chunk.js",
+    "static/js/2.8beb639e.chunk.js.map": "/static/js/2.8beb639e.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.40b16691987c43b5f7bae429491863d5.js": "/precache-manifest.40b16691987c43b5f7bae429491863d5.js",
+    "precache-manifest.478177dafe6cc987e856606885d80251.js": "/precache-manifest.478177dafe6cc987e856606885d80251.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.0624914a.chunk.css.map": "/static/css/2.0624914a.chunk.css.map",
-    "static/css/main.ba312116.chunk.css.map": "/static/css/main.ba312116.chunk.css.map",
+    "static/css/main.2212530a.chunk.css.map": "/static/css/main.2212530a.chunk.css.map",
     "static/media/coding.png": "/static/media/coding.e5e233cc.png",
+    "static/media/family.png": "/static/media/family.411f2f65.png",
     "static/media/food.png": "/static/media/food.318be3a0.png",
     "static/media/iceberg1.png": "/static/media/iceberg1.e59d76d5.png",
     "static/media/iceberg2.png": "/static/media/iceberg2.1e748262.png",
     "static/media/iceberg3.png": "/static/media/iceberg3.2a9a0240.png",
     "static/media/music.png": "/static/media/music.8661492c.png",
-    "static/media/politics.png": "/static/media/politics.34502139.png",
+    "static/media/music1.png": "/static/media/music1.9dc45298.png",
+    "static/media/politics.png": "/static/media/politics.f7f6763b.png",
     "static/media/politics2.png": "/static/media/politics2.7dc24b21.png"
   },
   "entrypoints": [
     "static/js/runtime-main.985e6003.js",
     "static/css/2.0624914a.chunk.css",
-    "static/js/2.18b91313.chunk.js",
-    "static/css/main.ba312116.chunk.css",
-    "static/js/main.8376c2d9.chunk.js"
+    "static/js/2.8beb639e.chunk.js",
+    "static/css/main.2212530a.chunk.css",
+    "static/js/main.066bfe97.chunk.js"
   ]
 }
