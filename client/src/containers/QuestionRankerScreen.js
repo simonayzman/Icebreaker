@@ -13,12 +13,12 @@ const QuestionRankerScreenContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
 const CardBody = styled.div`
   position: relative;
-  flex: 1;
+  padding-top: 100%;
   width: 100%;
   display: flex;
 `;
@@ -36,7 +36,6 @@ const CardContainer = styled.div`
   border-radius: 10px;
   background-color: white;
   padding: 20px;
-  max-height: 60vh;
   margin-bottom: 30px;
   ${({ center }) => (center === true ? 'justify-content: center;' : '')}
   ${({ visible }) =>
