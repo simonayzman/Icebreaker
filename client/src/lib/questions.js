@@ -1,4 +1,4 @@
-const questions = {
+const QUESTIONS = {
   q1: {
     questionId: 'q1',
     prompt: 'Do you think that people should have the freedom to blah blah blah?  1',
@@ -31,4 +31,5 @@ const questions = {
   },
 };
 
-export default questions;
+export const ORDERED_QUESTIONS = Object.keys(QUESTIONS);
+export default QUESTIONS;
