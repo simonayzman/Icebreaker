@@ -21,7 +21,7 @@ const PAGES = keymirror({
   RoomIntro: null,
   QuestionRanker: null,
   Room: null,
-  MatchedUser: null,
+  MatchedUsers: null,
 });
 
 const BackButtonContainer = styled.div`
@@ -41,7 +41,7 @@ export default class App extends Component {
       roomCode: null,
       roomName: null,
       roomSelection: null,
-      // page: PAGES.QuestionRanker, // REMOVE
+      page: PAGES.QuestionRanker, // REMOVE
     };
   }
 
@@ -132,10 +132,6 @@ export default class App extends Component {
     this.saveUserQuestionRankings(questionRankings);
   };
 
-  renderQuestionPreferenceSelector() {
-    return null;
-  }
-
   render() {
     const { page, userId, userName, roomSelection, roomCode, roomName } = this.state;
 
@@ -170,7 +166,15 @@ export default class App extends Component {
         );
         break;
       case PAGES.QuestionRanker:
-        component = <QuestionRankerScreen onRankAll={this.onRankAllQuestions} />;
+        component = (
+          <QuestionRankerScreen
+            onRankAll={this.onRankAllQuestions}
+            onEnterRoom={() => this.setState({ page: PAGES.MatchedUsers })}
+          />
+        );
+        break;
+      case PAGES.MatchedUsers:
+        component = <h2>{'Hi there!'}</h2>;
         break;
       default:
         component = <h1>{'NO SCREEN'}</h1>;
