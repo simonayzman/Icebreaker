@@ -24,6 +24,7 @@ import React, { Component } from 'react';
 
 // const numColumns = 3;
 // const size = (Dimensions.get('window').width - 50) / numColumns;
+const size = 10;
 
 export default class MatchedUserScreen extends Component {
   render() {
@@ -127,7 +128,7 @@ export default class MatchedUserScreen extends Component {
   */
 }
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1,
     paddingTop: 15,
@@ -199,4 +200,4 @@ const styles = StyleSheet.create({
   introduceText: {
     color: '#fff',
   },
-});
+};

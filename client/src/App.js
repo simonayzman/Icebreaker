@@ -10,7 +10,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import HomeScreen from './containers/HomeScreen';
 import RoomIntroScreen from './containers/RoomIntroScreen';
 import QuestionRankerScreen from './containers/QuestionRankerScreen';
-import MatchedUsersScreen from './containers/MatchedUsersScreen';
+import RoomScreen from './containers/RoomScreen';
+import MatchedUserScreen from './containers/MatchedUserScreen';
 import colors from './lib/colors';
 
 const AppContainer = styled.div`
@@ -50,6 +51,12 @@ const Header = styled.header`
       `}
 `;
 
+const BackButtonContainer = styled.div`
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+`;
+
 const socket = io();
 
 const PAGES = keymirror({
@@ -57,14 +64,8 @@ const PAGES = keymirror({
   RoomIntro: null,
   QuestionRanker: null,
   Room: null,
-  MatchedUsers: null,
+  MatchedUser: null,
 });
-
-const BackButtonContainer = styled.div`
-  position: absolute;
-  left: 20px;
-  bottom: 20px;
-`;
 
 export default class App extends Component {
   constructor() {
@@ -253,8 +254,11 @@ export default class App extends Component {
           />
         );
         break;
-      case PAGES.MatchedUsers:
-        component = <MatchedUsersScreen />;
+      case PAGES.Room:
+        component = <RoomScreen />;
+        break;
+      case PAGES.MatchedUser:
+        component = <MatchedUserScreen />;
         break;
       default:
         component = <h1>{'NO SCREEN'}</h1>;

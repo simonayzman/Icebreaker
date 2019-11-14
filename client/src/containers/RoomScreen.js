@@ -1,23 +1,33 @@
 import React, { Component } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  FlatList,
-  AsyncStorage,
-  ActivityIndicator,
-} from 'react-native';
-import { ExpoLinksView } from '@expo/samples';
-import { Button, Text, ListItem, Icon } from 'react-native-elements';
-import Swiper from 'react-native-deck-swiper';
-import Modal from 'react-native-modal';
-import _ from 'lodash';
+// import {
+//   ScrollView,
+//   StyleSheet,
+//   View,
+//   FlatList,
+//   AsyncStorage,
+//   ActivityIndicator,
+// } from 'react-native';
+// import { ExpoLinksView } from '@expo/samples';
+// import { Button, Text, ListItem, Icon } from 'react-native-elements';
+// import Swiper from 'react-native-deck-swiper';
+// import Modal from 'react-native-modal';
+// import _ from 'lodash';
 
-import { get_room } from '../Firestore';
-import SAMPLE_ROOM from '../constants/room';
-import SAMPLE_QUESTIONS from '../constants/questions';
+// import { get_room } from '../Firestore';
+// import SAMPLE_ROOM from '../constants/room';
+// import SAMPLE_QUESTIONS from '../constants/questions';
 
 export default class RoomScreen extends Component {
+  render() {
+    return (
+      <>
+        <h2>{'Room user screen'}</h2>
+        <h2>{'IN PROGRESS'}</h2>
+      </>
+    );
+  }
+
+  /*
   constructor() {
     super();
     this.state = {
@@ -193,9 +203,10 @@ export default class RoomScreen extends Component {
       </View>
     );
   }
+  */
 }
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1,
     paddingTop: 15,
@@ -218,4 +229,4 @@ const styles = StyleSheet.create({
     fontSize: 32,
     backgroundColor: 'transparent',
   },
-});
+};
