@@ -1,30 +1,42 @@
 import React, { Component } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  FlatList,
-  Image,
-  Dimensions,
-  SafeAreaView,
-} from 'react-native';
-import { ExpoLinksView } from '@expo/samples';
-import { Button, Text, ListItem, Icon } from 'react-native-elements';
-import Swiper from 'react-native-deck-swiper';
-import Modal from 'react-native-modal';
+// import {
+//   ScrollView,
+//   StyleSheet,
+//   View,
+//   FlatList,
+//   Image,
+//   Dimensions,
+//   SafeAreaView,
+// } from 'react-native';
+// import { ExpoLinksView } from '@expo/samples';
+// import { Button, Text, ListItem, Icon } from 'react-native-elements';
+// import Swiper from 'react-native-deck-swiper';
+// import Modal from 'react-native-modal';
 
-import SAMPLE_QUESTIONS from '../constants/questions';
-import SAMPLE_MATCHES from '../constants/matches';
-import SAMPLE_USERS from '../constants/users';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+// import SAMPLE_QUESTIONS from '../constants/questions';
+// import SAMPLE_MATCHES from '../constants/matches';
+// import SAMPLE_USERS from '../constants/users';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const TOTAL_NUM_OF_QUESTIONS = Object.keys(SAMPLE_QUESTIONS).length;
+// const TOTAL_NUM_OF_QUESTIONS = Object.keys(SAMPLE_QUESTIONS).length;
 
-const checkMarkIcon = require('../assets/checkCircle3.png');
+// const checkMarkIcon = require('../assets/checkCircle3.png');
 
-const numColumns = 3;
-const size = (Dimensions.get('window').width - 50) / numColumns;
+// const numColumns = 3;
+// const size = (Dimensions.get('window').width - 50) / numColumns;
+
 export default class MatchedUserScreen extends Component {
+  render() {
+    return (
+      <>
+        <h2>{'Matched users screen'}</h2>
+        <h2>{'IN PROGRESS'}</h2>
+      </>
+    );
+  }
+
+  /*
+
   constructor(props) {
     super(props);
     this.user = Object.values(props.navigation.state.params)[0];
@@ -112,6 +124,7 @@ export default class MatchedUserScreen extends Component {
       </SafeAreaView>
     );
   }
+  */
 }
 
 const styles = StyleSheet.create({

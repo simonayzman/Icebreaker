@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import HomeScreen from './containers/HomeScreen';
 import RoomIntroScreen from './containers/RoomIntroScreen';
 import QuestionRankerScreen from './containers/QuestionRankerScreen';
+import MatchedUsersScreen from './containers/MatchedUsersScreen';
 import colors from './lib/colors';
 
 const AppContainer = styled.div`
@@ -253,12 +254,7 @@ export default class App extends Component {
         );
         break;
       case PAGES.MatchedUsers:
-        component = (
-          <>
-            <h2>{'Matched users screen'}</h2>
-            <h2>{'IN PROGRESS'}</h2>
-          </>
-        );
+        component = <MatchedUsersScreen />;
         break;
       default:
         component = <h1>{'NO SCREEN'}</h1>;
