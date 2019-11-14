@@ -37,6 +37,7 @@ export default class App extends Component {
       page: PAGES.Home,
       userId: null,
       userName: null,
+      userQuestionRankings: null,
       roomCode: null,
       roomName: null,
       roomSelection: null,
@@ -54,12 +55,16 @@ export default class App extends Component {
     try {
       const userId = localStorage.getItem('user-id');
       const userName = localStorage.getItem('user-name');
+      const userQuestionRankings = JSON.parse(localStorage.getItem('user-question-rankings'));
       const roomCode = localStorage.getItem('room-code');
       const roomName = localStorage.getItem('room-name');
       this.setState({ userId, userName, roomCode, roomName });
-      console.log(
-        `Hydrating from local storage:\nUser ID: ${userId}\nUser Name: ${userName}\nRoom Code: ${roomCode}\nRoom Name: ${roomName}`
-      );
+      console.log('Hydrating from local storage');
+      console.log(`User ID: ${userId}`);
+      console.log(`User Name: ${userName}`);
+      console.log(`User Question Rankings: `, userQuestionRankings);
+      console.log(`Room Code: ${roomCode}`);
+      console.log(`Room Name: ${roomName}`);
 
       if (userId === null) {
         const newId = uuid();
@@ -78,6 +83,14 @@ export default class App extends Component {
       localStorage.setItem('user-name', userName);
       localStorage.setItem('room-code', roomCode);
       localStorage.setItem('room-name', roomName);
+    } catch (error) {
+      console.log('Local storage saving error: ', error);
+    }
+  };
+
+  saveUserQuestionRankings = questionRankings => {
+    try {
+      localStorage.setItem('user-question-rankings', JSON.stringify(questionRankings));
     } catch (error) {
       console.log('Local storage saving error: ', error);
     }
@@ -106,6 +119,11 @@ export default class App extends Component {
       default:
         break;
     }
+  };
+
+  onRankAllQuestions = questionRankings => {
+    this.setState({ userQuestionRankings: questionRankings });
+    this.saveUserQuestionRankings(questionRankings);
   };
 
   renderQuestionPreferenceSelector() {
@@ -146,7 +164,7 @@ export default class App extends Component {
         );
         break;
       case PAGES.QuestionRanker:
-        component = <QuestionRankerScreen />;
+        component = <QuestionRankerScreen onRankAll={this.onRankAllQuestions} />;
         break;
       default:
         component = <h1>{'NO SCREEN'}</h1>;
