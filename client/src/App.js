@@ -206,8 +206,11 @@ export default class App extends Component {
       case PAGES.QuestionRanker:
         this.navigate(PAGES.Home, true);
         break;
-      case PAGES.MatchedUsers:
+      case PAGES.Room:
         this.navigate(PAGES.Home, true);
+        break;
+      case PAGES.MatchedUser:
+        this.navigate(PAGES.Room, true);
         break;
       default:
         break;
@@ -226,7 +229,8 @@ export default class App extends Component {
   };
 
   onEnterRoom = () => {
-    this.navigate(PAGES.MatchedUsers);
+    this.navigate(PAGES.Room);
+  };
 
   onUpdateMatches = ({ users, matches }) => {
     const { userId } = this.state;
