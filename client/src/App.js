@@ -86,8 +86,9 @@ export default class App extends Component {
 
   componentDidMount() {
     this.hydrateFromLocalStorage();
-    socket.on('connect', () => console.log('Socket connected on the front-end.'));
+    socket.on('connect', this.onConnectSocket);
     socket.on('join_room_success', data => console.log('Successfully joined room: ', data));
+    socket.on('rejoin_room_success', data => console.log('Successfully re-joined room: ', data));
   }
 
   hydrateFromLocalStorage = () => {
@@ -132,6 +133,15 @@ export default class App extends Component {
       localStorage.setItem('user-question-rankings', JSON.stringify(questionRankings));
     } catch (error) {
       console.log('Local storage saving error: ', error);
+    }
+  };
+
+  onConnectSocket = () => {
+    console.log('Socket connected on the front-end.');
+
+    const { roomCode, userId } = this.state;
+    if (roomCode && userId) {
+      socket.emit('rejoin_room', { roomCode, userId });
     }
   };
 
