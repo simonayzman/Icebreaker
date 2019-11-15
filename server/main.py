@@ -18,10 +18,10 @@ load_dotenv()
 
 cred_val = environ.get("GOOGLE_CREDENTIALS")
 if cred_val == None:
-    print("Didn't find environment credentials! Reverting to local file.")
+    print("Didn't find environment credentials! Reverting to local file.\n")
     cred = credentials.Certificate("./keys.json")
 else:
-    print("Found environment credentials! Converting to json.")
+    print("Found environment credentials! Converting to json.\n")
     cred_json = json.loads(cred_val)
     cred = credentials.Certificate(cred_json)
 firebase_admin.initialize_app(cred)
@@ -102,7 +102,7 @@ def createRoomPath():
     except:
         response = {"error": True, "errorType": "Unknown error"}
 
-    print(f"Room creation for code {room_code} yielded response: {response}")
+    print(f"Room creation for code {room_code} yielded response: {response}\n")
 
     return jsonify(response)
 
@@ -118,7 +118,7 @@ def checkRoomPath():
     else:
         response = room
 
-    print(f"Looking for room {room_code} yielded response: {response}")
+    print(f"Looking for room {room_code} yielded response: {response}\n")
 
     return jsonify(response)
 
@@ -126,7 +126,9 @@ def checkRoomPath():
 # Socket connections
 @socketio.on("connect")
 def on_connect():
-    print("Socket connected on the back-end.")
+    print("Socket connected on the back-end.\n")
+
+
 @socketio.on("rejoin_room")
 def on_rejoin_room(data):
     print(f"Re-joining room: {data}\n")
@@ -138,11 +140,11 @@ def on_rejoin_room(data):
 
 @socketio.on("join_room")
 def on_join_room(data):
-    print(f"Joining room: {data}")
+    print(f"Joining room: {data}\n")
     room_code = data["roomCode"]
     user = data["user"]
     user_id = user["userId"]
-    join_room(room_code, user_id)
+    join_room(room_code)
     rooms_ref.document(room_code).update({f"users.{user_id}": user})
     emit("join_room_success", user)
 
