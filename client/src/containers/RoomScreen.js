@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 // import {
 //   ScrollView,
 //   StyleSheet,
@@ -19,10 +20,12 @@ import React, { Component } from 'react';
 
 export default class RoomScreen extends Component {
   render() {
+    const { onRetakeQuestionRanker } = this.props;
     return (
       <>
         <h2>{'Room user screen'}</h2>
         <h2>{'IN PROGRESS'}</h2>
+        <Button onClick={onRetakeQuestionRanker}>{'Retake question rankings'}</Button>
       </>
     );
   }

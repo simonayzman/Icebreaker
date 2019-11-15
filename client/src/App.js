@@ -196,6 +196,10 @@ export default class App extends Component {
     this.saveUserRoom(userName, roomCode, roomName);
   };
 
+  onRetakeQuestionRanker = () => {
+    this.navigate(PAGES.QuestionRanker, true);
+  };
+
   onBack = () => {
     const { page } = this.state;
 
@@ -306,7 +310,7 @@ export default class App extends Component {
         );
         break;
       case PAGES.Room:
-        component = <RoomScreen />;
+        component = <RoomScreen onRetakeQuestionRanker={this.onRetakeQuestionRanker} />;
         break;
       case PAGES.MatchedUser:
         component = <MatchedUserScreen />;
