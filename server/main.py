@@ -127,6 +127,13 @@ def checkRoomPath():
 @socketio.on("connect")
 def on_connect():
     print("Socket connected on the back-end.")
+@socketio.on("rejoin_room")
+def on_rejoin_room(data):
+    print(f"Re-joining room: {data}\n")
+    room_code = data["roomCode"]
+    user_id = data["userId"]
+    join_room(room_code)
+    emit("rejoin_room_success", {"roomCode": room_code, "userId": user_id})
 
 
 @socketio.on("join_room")
