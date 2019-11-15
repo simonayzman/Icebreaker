@@ -75,6 +75,7 @@ export default class App extends Component {
       userId: null,
       userName: null,
       userQuestionRankings: null,
+      userMatches: null,
       roomCode: null,
       roomName: null,
       roomSelection: null,
@@ -89,6 +90,7 @@ export default class App extends Component {
     socket.on('connect', this.onConnectSocket);
     socket.on('join_room_success', data => console.log('Successfully joined room: ', data));
     socket.on('rejoin_room_success', data => console.log('Successfully re-joined room: ', data));
+    socket.on('update_matches', this.onUpdateMatches);
   }
 
   hydrateFromLocalStorage = () => {
@@ -96,13 +98,15 @@ export default class App extends Component {
       const userId = localStorage.getItem('user-id');
       const userName = localStorage.getItem('user-name');
       const userQuestionRankings = JSON.parse(localStorage.getItem('user-question-rankings'));
+      const userMatches = JSON.parse(localStorage.getItem('user-matches'));
       const roomCode = localStorage.getItem('room-code');
       const roomName = localStorage.getItem('room-name');
-      this.setState({ userId, userName, roomCode, roomName, userQuestionRankings });
+      this.setState({ userId, userName, userQuestionRankings, userMatches, roomCode, roomName });
       console.log('Hydrating from local storage');
       console.log(`User ID: ${userId}`);
       console.log(`User Name: ${userName}`);
       console.log(`User Question Rankings: `, userQuestionRankings);
+      console.log(`User Matches: `, userMatches);
       console.log(`Room Code: ${roomCode}`);
       console.log(`Room Name: ${roomName}`);
 
@@ -131,6 +135,14 @@ export default class App extends Component {
   saveUserQuestionRankings = questionRankings => {
     try {
       localStorage.setItem('user-question-rankings', JSON.stringify(questionRankings));
+    } catch (error) {
+      console.log('Local storage saving error: ', error);
+    }
+  };
+
+  saveUserMatches = matches => {
+    try {
+      localStorage.setItem('user-matches', JSON.stringify(matches));
     } catch (error) {
       console.log('Local storage saving error: ', error);
     }
@@ -180,7 +192,7 @@ export default class App extends Component {
 
     socket.emit('join_room', { roomCode, user: { userId, userName, userDescription } });
     this.setState({ userName, roomCode, roomName });
-    this.navigate(userQuestionRankings == null ? PAGES.QuestionRanker : PAGES.MatchedUsers);
+    this.navigate(userQuestionRankings == null ? PAGES.QuestionRanker : PAGES.Room);
     this.saveUserRoom(userName, roomCode, roomName);
   };
 
@@ -203,12 +215,37 @@ export default class App extends Component {
   };
 
   onRankAllQuestions = questionRankings => {
+    const { userId, roomCode } = this.state;
     this.setState({ userQuestionRankings: questionRankings });
     this.saveUserQuestionRankings(questionRankings);
+    socket.emit('update_question_rankings', {
+      userId,
+      userQuestionRankings: questionRankings,
+      roomCode,
+    });
   };
 
   onEnterRoom = () => {
     this.navigate(PAGES.MatchedUsers);
+
+  onUpdateMatches = ({ users, matches }) => {
+    const { userId } = this.state;
+    console.log('Receiving matches: ', matches, users);
+
+    const currentUserMatches = {};
+    for (let matchId in matches) {
+      if (!matchId.includes(userId)) {
+        continue;
+      }
+      const otherUserId = matchId.replace(userId, '');
+      currentUserMatches[otherUserId] = {
+        ...users[otherUserId],
+        ...matches[matchId],
+      };
+    }
+
+    this.setState({ matches: currentUserMatches });
+    this.saveUserMatches(currentUserMatches);
   };
 
   navigate = (page, goingBack = false) => {
