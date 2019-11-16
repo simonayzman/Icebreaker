@@ -62,7 +62,10 @@ def create_room():
     except:
         response = {"error": True, "errorType": "Unknown error"}
 
-    print(f"Room creation for code {room_code} yielded response: {response}\n")
+    if response.get("error"):
+        print(f"Room creation for code {room_code} error: {response}\n")
+    else:
+        print(f"Room creation for code {room_code} successful.\n")
 
     return jsonify(response)
 
@@ -78,7 +81,10 @@ def check_room():
     else:
         response = room
 
-    print(f"Looking for room {room_code} yielded response: {response}\n")
+    if response.get("error"):
+        print(f"Room creation for code {room_code} error: {response}\n")
+    else:
+        print(f"Room creation for code {room_code} successful.\n")
 
     return jsonify(response)
 
