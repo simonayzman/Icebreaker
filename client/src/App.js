@@ -80,6 +80,7 @@ export default class App extends Component {
       roomCode: null,
       roomName: null,
       roomSelection: null,
+      currentMatch: null,
       navigating: false,
       navigatedBack: false,
       devResetCount: 0,
@@ -276,6 +277,7 @@ export default class App extends Component {
 
   onExamineUser = match => {
     this.navigate(PAGES.MatchedUser, match);
+    this.setState({ currentMatch: match });
   };
 
   navigate = (page, goingBack = false) => {
@@ -295,6 +297,7 @@ export default class App extends Component {
       roomSelection,
       roomCode,
       roomName,
+      currentMatch,
       navigating,
       navigatedBack,
     } = this.state;
@@ -346,7 +349,7 @@ export default class App extends Component {
         );
         break;
       case PAGES.MatchedUser:
-        component = <MatchedUserScreen />;
+        component = <MatchedUserScreen match={currentMatch} />;
         break;
       default:
         component = <h1>{'NO SCREEN'}</h1>;
