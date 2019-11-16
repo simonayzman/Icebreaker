@@ -71,11 +71,12 @@ const ButtonSubtitle = styled.div`
 
 export default class HomeScreen extends Component {
   render() {
-    const { roomNameHint, onStartCreateRoom, onStartJoinRoom, onClickLogo } = this.props;
-    const joinRoomButtonText =
-      roomNameHint != null && roomNameHint.length > 0
-        ? `Join Room (${roomNameHint}?)`
-        : 'Join Room';
+    const { /* roomNameHint, */ onStartCreateRoom, onStartJoinRoom, onClickLogo } = this.props;
+    const joinRoomButtonText = 'Join Room';
+    // const alternateJoinRoomButtonText =
+    //   roomNameHint != null && roomNameHint.length > 0
+    //     ? `Join Room (${roomNameHint}?)`
+    //     : 'Join Room';
     return (
       <HomeScreenContainer>
         <LogoContainer>
