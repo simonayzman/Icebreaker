@@ -37,7 +37,7 @@ const LogoText = styled.div`
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-family: AppleSDGothicNeo-Bold;
+  font-weight: bold;
   font-size: 28px;
   text-align: center;
   color: ${colors.logo};
@@ -46,7 +46,6 @@ const LogoText = styled.div`
 
 const Tagline = styled.div`
   color: ${colors.tagline};
-  font-family: AppleSDGothicNeo-Regular;
   font-size: 16px;
   text-align: center;
   line-height: 1.25;
@@ -67,7 +66,6 @@ const ButtonContainer = styled.div`
 
 const ButtonSubtitle = styled.div`
   color: ${colors.subtitle};
-  font-family: AppleSDGothicNeo-Light;
   font-size: 16px;
 `;
 
