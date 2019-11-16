@@ -15,6 +15,7 @@ import google
 import env
 from firebase import rooms_ref
 from configs import get_config
+from match import determine_matches
 
 app = Flask(
     __name__,
@@ -115,6 +116,7 @@ def on_join_room(data):
     emit("join_room_success", user)
 
 
+# Consider using a queue for synchronous updates
 @socketio.on("update_question_rankings")
 def on_update_question_rankings(data):
     print(f"Updating question rankings: {data}\n")
@@ -122,93 +124,14 @@ def on_update_question_rankings(data):
     user_question_rankings = data["userQuestionRankings"]
     room_code = data["roomCode"]
 
+    # Synchronize current user state
     rooms_ref.document(room_code).update(
-        {f"users.{user_id}.userQuestionRankings": user_question_rankings}
-    )
-
+        {f"users.{user_id}.userQuestionRankings": user_question_rankings})
     room_data = rooms_ref.document(room_code).get().to_dict()
     users = room_data["users"]
-    matches = room_data["matches"]
 
-    for other_user_id in users:
-        if other_user_id == user_id:
-            continue
-
-        match_id = (
-            f"{other_user_id}{user_id}"
-            if other_user_id < user_id
-            else f"{user_id}{other_user_id}"
-        )
-
-        other_user_data = users[other_user_id]
-        other_user_question_rankings = other_user_data.get(
-            "userQuestionRankings", {}
-        )
-
-        common_answered_questions = [
-            question_id
-            for question_id in user_question_rankings.keys()
-            if question_id in other_user_question_rankings.keys()
-        ]
-        common_liked_questions = []
-
-        match_accumulator = 0.0
-        for question_id in common_answered_questions:
-            current_user_answer = user_question_rankings[question_id]
-            other_user_answer = other_user_question_rankings[question_id]
-
-            if current_user_answer == "dislike":
-                if other_user_answer == "dislike":
-                    match_accumulator += 1.0
-                elif other_user_answer == "indifferent":
-                    match_accumulator += 0.5
-                elif other_user_answer == "like":
-                    match_accumulator += 0.0
-                elif other_user_answer == "superlike":
-                    match_accumulator += -0.5
-            elif current_user_answer == "indifferent":
-                if other_user_answer == "dislike":
-                    match_accumulator += 0.5
-                elif other_user_answer == "indifferent":
-                    match_accumulator += 1.0
-                elif other_user_answer == "like":
-                    match_accumulator += 0.5
-                elif other_user_answer == "superlike":
-                    match_accumulator += 0.0
-            elif current_user_answer == "like":
-                if other_user_answer == "dislike":
-                    match_accumulator += 0.0
-                elif other_user_answer == "indifferent":
-                    match_accumulator += 0.5
-                elif other_user_answer == "like":
-                    common_liked_questions.append(question_id)
-                    match_accumulator += 1.0
-                elif other_user_answer == "superlike":
-                    common_liked_questions.append(question_id)
-                    match_accumulator += 1.5
-            elif current_user_answer == "superlike":
-                if other_user_answer == "dislike":
-                    match_accumulator += -0.5
-                elif other_user_answer == "indifferent":
-                    match_accumulator += 0.0
-                elif other_user_answer == "like":
-                    common_liked_questions.append(question_id)
-                    match_accumulator += 1.5
-                elif other_user_answer == "superlike":
-                    common_liked_questions.append(question_id)
-                    match_accumulator += 2.0
-
-        match_strength = 0
-        if common_answered_questions:
-            match_strength = match_accumulator / len(common_answered_questions)
-        match_data = {
-            "matchStrength": match_strength,
-            "commonQuestions": common_liked_questions,
-        }
-        matches[match_id] = match_data
-        rooms_ref.document(room_code).update(
-            {f"matches.{match_id}": match_data}
-        )
-
+    # Determine matches
+    matches = determine_matches(user_id, room_data)
+    rooms_ref.document(room_code).update({f"matches": matches})
     emit("update_matches", {"matches": matches,
                             "users": users}, room=room_code)
