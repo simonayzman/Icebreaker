@@ -51,9 +51,6 @@ export default class RoomScreen extends Component {
         body = (
           <>
             <List>{sortedMatches.map(this.renderMatch)}</List>
-            <Button onClick={onRetakeQuestionRanker} style={{ marginTop: '20px' }}>
-              {'Re-rank questions!'}
-            </Button>
           </>
         );
       } else {
@@ -63,6 +60,13 @@ export default class RoomScreen extends Component {
       body = <Spinner animation="border" size="lg" variant="primary" />;
     }
 
-    return <RoomScreenContainer>{body}</RoomScreenContainer>;
+    return (
+      <RoomScreenContainer>
+        {body}
+        <Button onClick={onRetakeQuestionRanker} style={{ marginTop: '20px' }}>
+          {'Re-rank questions!'}
+        </Button>
+      </RoomScreenContainer>
+    );
   }
 }
