@@ -1,24 +1,25 @@
 {
   "files": {
-    "main.css": "/static/css/main.60e690ff.chunk.css",
-    "main.js": "/static/js/main.4f411af7.chunk.js",
-    "main.js.map": "/static/js/main.4f411af7.chunk.js.map",
+    "main.css": "/static/css/main.cfb0345f.chunk.css",
+    "main.js": "/static/js/main.185d99f3.chunk.js",
+    "main.js.map": "/static/js/main.185d99f3.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.985e6003.js",
     "runtime-main.js.map": "/static/js/runtime-main.985e6003.js.map",
     "static/css/2.0624914a.chunk.css": "/static/css/2.0624914a.chunk.css",
-    "static/js/2.340d8ac8.chunk.js": "/static/js/2.340d8ac8.chunk.js",
-    "static/js/2.340d8ac8.chunk.js.map": "/static/js/2.340d8ac8.chunk.js.map",
+    "static/js/2.1079015e.chunk.js": "/static/js/2.1079015e.chunk.js",
+    "static/js/2.1079015e.chunk.js.map": "/static/js/2.1079015e.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.a6317017248fb9b23736ac157f2ac4b1.js": "/precache-manifest.a6317017248fb9b23736ac157f2ac4b1.js",
+    "precache-manifest.21e397bba5ece4f032d97d2590a338fa.js": "/precache-manifest.21e397bba5ece4f032d97d2590a338fa.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.0624914a.chunk.css.map": "/static/css/2.0624914a.chunk.css.map",
-    "static/css/main.60e690ff.chunk.css.map": "/static/css/main.60e690ff.chunk.css.map",
-    "static/media/coding.png": "/static/media/coding.e5e233cc.png",
+    "static/css/main.cfb0345f.chunk.css.map": "/static/css/main.cfb0345f.chunk.css.map",
     "static/media/family.png": "/static/media/family.411f2f65.png",
     "static/media/food.png": "/static/media/food.318be3a0.png",
     "static/media/iceberg1.png": "/static/media/iceberg1.e59d76d5.png",
     "static/media/iceberg2.png": "/static/media/iceberg2.1e748262.png",
     "static/media/iceberg3.png": "/static/media/iceberg3.2a9a0240.png",
+    "static/media/internet.png": "/static/media/internet.6d04fd9e.png",
+    "static/media/meditation.png": "/static/media/meditation.2d44a4e3.png",
     "static/media/music.png": "/static/media/music.8661492c.png",
     "static/media/music1.png": "/static/media/music1.9dc45298.png",
     "static/media/politics.png": "/static/media/politics.f7f6763b.png",
@@ -27,8 +28,8 @@
   "entrypoints": [
     "static/js/runtime-main.985e6003.js",
     "static/css/2.0624914a.chunk.css",
-    "static/js/2.340d8ac8.chunk.js",
-    "static/css/main.60e690ff.chunk.css",
-    "static/js/main.4f411af7.chunk.js"
+    "static/js/2.1079015e.chunk.js",
+    "static/css/main.cfb0345f.chunk.css",
+    "static/js/main.185d99f3.chunk.js"
   ]
 }
