@@ -33,7 +33,7 @@ const Header = styled.header`
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  padding: 20px;
+  padding: 60px 20px 20px 20px;
   ${({ navigating }) =>
     navigating
       ? css`
@@ -54,7 +54,7 @@ const Header = styled.header`
 const BackButtonContainer = styled.div`
   position: absolute;
   left: 20px;
-  bottom: 20px;
+  top: 20px;
 `;
 
 const socket = io();
@@ -74,6 +74,7 @@ export default class App extends Component {
       page: PAGES.Home,
       userId: null,
       userName: null,
+      userDescription: null,
       userQuestionRankings: null,
       userMatches: null,
       roomCode: null,
@@ -97,12 +98,21 @@ export default class App extends Component {
     try {
       const userId = localStorage.getItem('user-id');
       const userName = localStorage.getItem('user-name');
+      const userDescription = localStorage.getItem('user-description');
       const userQuestionRankings = JSON.parse(localStorage.getItem('user-question-rankings'));
       const userMatches = JSON.parse(localStorage.getItem('user-matches'));
       const roomCode = localStorage.getItem('room-code');
       const roomName = localStorage.getItem('room-name');
       this.setState(
-        { userId, userName, userQuestionRankings, userMatches, roomCode, roomName },
+        {
+          userId,
+          userName,
+          userDescription,
+          userQuestionRankings,
+          userMatches,
+          roomCode,
+          roomName,
+        },
         () => console.log('Hydrated data from local storage.', this.state)
       );
 
@@ -118,9 +128,10 @@ export default class App extends Component {
     }
   };
 
-  saveUserRoom = (userName, roomCode, roomName) => {
+  saveUserRoom = (userName, userDescription, roomCode, roomName) => {
     try {
       localStorage.setItem('user-name', userName);
+      localStorage.setItem('user-description', userDescription);
       localStorage.setItem('room-code', roomCode);
       localStorage.setItem('room-name', roomName);
     } catch (error) {
@@ -162,6 +173,7 @@ export default class App extends Component {
       this.setState({ userQuestionRankings: null });
     } else if (devResetCount === 1) {
       localStorage.removeItem('user-name');
+      localStorage.removeItem('user-description');
       localStorage.removeItem('user-id');
       localStorage.removeItem('room-code');
       localStorage.removeItem('room-name');
@@ -187,8 +199,8 @@ export default class App extends Component {
     const { userName, userDescription } = user;
 
     socket.emit('join_room', { roomCode, user: { userId, userName, userDescription } });
-    this.setState({ userName, roomCode, roomName });
-    this.saveUserRoom(userName, roomCode, roomName);
+    this.setState({ userName, userDescription, roomCode, roomName });
+    this.saveUserRoom(userName, userDescription, roomCode, roomName);
 
     if (userQuestionRankings) {
       this.navigate(PAGES.Room);
@@ -258,8 +270,12 @@ export default class App extends Component {
       };
     }
 
-    this.setState({ matches: currentUserMatches });
+    this.setState({ userMatches: currentUserMatches });
     this.saveUserMatches(currentUserMatches);
+  };
+
+  onExamineUser = match => {
+    this.navigate(PAGES.MatchedUser, match);
   };
 
   navigate = (page, goingBack = false) => {
@@ -271,6 +287,8 @@ export default class App extends Component {
     const {
       page,
       userName,
+      userDescription,
+      userMatches,
       roomSelection,
       roomCode,
       roomName,
@@ -300,6 +318,7 @@ export default class App extends Component {
         component = (
           <RoomIntroScreen
             userNameHint={userName}
+            userDescriptionHint={userDescription}
             roomCodeHint={roomCode}
             roomSelection={roomSelection}
             onJoinRoom={this.onJoinRoom}
@@ -315,7 +334,13 @@ export default class App extends Component {
         );
         break;
       case PAGES.Room:
-        component = <RoomScreen onRetakeQuestionRanker={this.onRetakeQuestionRanker} />;
+        component = (
+          <RoomScreen
+            matches={userMatches}
+            onExamineUser={this.onExamineUser}
+            onRetakeQuestionRanker={this.onRetakeQuestionRanker}
+          />
+        );
         break;
       case PAGES.MatchedUser:
         component = <MatchedUserScreen />;

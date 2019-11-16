@@ -94,7 +94,7 @@ export default class RoomIntroScreen extends Component {
   };
 
   render() {
-    const { userNameHint, roomCodeHint, roomSelection } = this.props;
+    const { userNameHint, userDescriptionHint, roomCodeHint, roomSelection } = this.props;
     const { generatedRoomCode } = this.state;
 
     let roomNameInput = null;
@@ -102,7 +102,7 @@ export default class RoomIntroScreen extends Component {
       roomNameInput = (
         <FieldContainer>
           <FieldLabel htmlFor="roomName">{'Room Name'}</FieldLabel>
-          <StyledField name="roomName" type="text" placeholder="(optional)" />
+          <StyledField name="roomName" type="text" />
           <ErrorMessage
             name="roomName"
             render={msg => <StyledErrorMessage>{msg}</StyledErrorMessage>}
@@ -122,13 +122,14 @@ export default class RoomIntroScreen extends Component {
               : roomCodeHint,
           roomName: '',
           userName: userNameHint == null ? '' : userNameHint,
-          userDescription: '',
+          userDescription: userDescriptionHint == null ? '' : userDescriptionHint,
         }}
         validationSchema={Yup.object({
           roomCode: Yup.string()
             .min(6, 'Must be 6 characters')
             .max(6, 'Must be 6 characters')
             .required('*Required'),
+          roomName: roomSelection === 'create' ? Yup.string().required('*Required') : null,
           userName: Yup.string().required('*Required'),
           userDescription: Yup.string().required('*Required'),
         })}
