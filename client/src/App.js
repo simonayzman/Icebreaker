@@ -280,7 +280,10 @@ export default class App extends Component {
 
   navigate = (page, goingBack = false) => {
     this.setState({ navigating: true, navigatedBack: goingBack });
-    setTimeout(() => this.setState({ page, navigating: false, navigatedBack: false }), 500);
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      this.setState({ page, navigating: false, navigatedBack: false });
+    }, 500);
   };
 
   render() {
