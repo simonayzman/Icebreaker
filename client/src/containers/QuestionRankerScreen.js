@@ -46,6 +46,7 @@ const CardContainer = styled.div`
           transform: translateX(0) translateY(0);
         `
       : css`
+          pointer-events: none;
           transition: opacity 500ms, transform 500ms;
           opacity: 0;
           ${props => {
