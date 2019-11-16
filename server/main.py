@@ -111,9 +111,13 @@ def on_join_room(data):
     room_code = data["roomCode"]
     user = data["user"]
     user_id = user["userId"]
+
+    existing_user_data = rooms_ref.document(
+        room_code).get().to_dict().get("users").get(user_id, {})
+    rooms_ref.document(room_code).update(
+        {f"users.{user_id}": {**existing_user_data, **user}})
     join_room(room_code)
-    rooms_ref.document(room_code).update({f"users.{user_id}": user})
-    emit("join_room_success", user)
+    emit("join_room_success", {"roomCode": room_code, **user})
 
 
 # Consider using a queue for synchronous updates
