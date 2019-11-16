@@ -1,3 +1,4 @@
+# Package imports
 from os import environ
 from flask import Flask, render_template, send_from_directory, request, jsonify
 from flask_socketio import SocketIO, emit, join_room
@@ -5,7 +6,6 @@ from flask_cors import CORS
 from flask_debug import Debug
 from datetime import datetime
 from uuid import uuid4
-
 import urllib
 import json
 import google
@@ -14,7 +14,11 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from dotenv import load_dotenv
 
+from configs import getConfig
+
 load_dotenv()
+
+# Local imports
 
 cred_val = environ.get("GOOGLE_CREDENTIALS")
 if cred_val == None:
@@ -28,32 +32,6 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 users_ref = db.collection("users")
 rooms_ref = db.collection("rooms")
-
-configs = {
-    "development": {
-        "client": {
-            "token": "((( DEV ENV )))",
-            "api": "http://localhost",
-            "port": 8000,
-        },
-        "server": {"static": "../client/build", "template": "../client/build"},
-    },
-    "production": {
-        "client": {
-            "token": "((( PROD ENV )))",
-            "api": "https://deep-dive-072193.herokuapp.com",
-            # "port": environ.get("PORT"),
-        },
-        "server": {
-            "static": "../client/build/static",
-            "template": "../client/build",
-        },
-    },
-}
-
-
-def getConfig(platform="server"):
-    return configs[environ.get("FLASK_ENV")][platform]
 
 
 app = Flask(
@@ -244,5 +222,5 @@ def on_update_question_rankings(data):
             {f"matches.{match_id}": match_data}
         )
 
-    emit("update_matches", {"matches": matches, "users": users}, room=room_code)
-
+    emit("update_matches", {"matches": matches,
+                            "users": users}, room=room_code)
