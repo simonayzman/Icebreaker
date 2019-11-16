@@ -76,6 +76,16 @@ const CardText = styled.div`
   font-size: 24px;
   color: black;
   line-height: 1.15;
+  margin-bottom: 20px;
+`;
+
+const CardSubtitleText = styled.div`
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  font-size: 16px;
+  color: gray;
+  line-height: 1;
 `;
 
 const CardImage = styled.img`
@@ -163,6 +173,7 @@ export default class QuestionRankerScreen extends Component {
         <CardContainer visible={index === cardIndex} lastRanking={lastRanking}>
           <CardImage src={require(`../assets/${image}.png`)} />
           <CardText>{prompt}</CardText>
+          <CardSubtitleText>{'(How much would you want to talk about this?)'}</CardSubtitleText>
         </CardContainer>
       </Swipeable>
     );
