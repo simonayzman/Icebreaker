@@ -1,4 +1,5 @@
 # Package imports
+from configs import get_config
 from os import environ
 from flask import Flask, render_template, send_from_directory, request, jsonify
 from flask_socketio import SocketIO, emit, join_room
@@ -7,37 +8,18 @@ from flask_debug import Debug
 from datetime import datetime
 from uuid import uuid4
 import urllib
-import json
+from json import dumps
 import google
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
-from dotenv import load_dotenv
-
-from configs import getConfig
-
-load_dotenv()
 
 # Local imports
-
-cred_val = environ.get("GOOGLE_CREDENTIALS")
-if cred_val == None:
-    print("Didn't find environment credentials! Reverting to local file.\n")
-    cred = credentials.Certificate("./keys.json")
-else:
-    print("Found environment credentials! Converting to json.\n")
-    cred_json = json.loads(cred_val)
-    cred = credentials.Certificate(cred_json)
-firebase_admin.initialize_app(cred)
-db = firestore.client()
-users_ref = db.collection("users")
-rooms_ref = db.collection("rooms")
-
+import env
+from firebase import rooms_ref
+from configs import get_config
 
 app = Flask(
     __name__,
-    static_folder=getConfig()["static"],
-    template_folder=getConfig()["template"],
+    static_folder=get_config()["static"],
+    template_folder=get_config()["template"],
 )
 Debug(app)
 CORS(app)
@@ -46,17 +28,17 @@ socketio = SocketIO(app, async_mode="eventlet")
 # App routes
 @app.route("/")
 def index():
-    config_json_string = json.dumps(getConfig(platform="client"))
+    config_json_string = dumps(get_config(platform="client"))
     return render_template("index.html", config=config_json_string)
 
 
 @app.route("/<path:path>")
-def indexPath(path):
-    return send_from_directory(getConfig()["template"], path)
+def index_resource(path):
+    return send_from_directory(get_config()["template"], path)
 
 
 @app.route("/createRoom")
-def createRoomPath():
+def create_room():
     room_code = urllib.parse.unquote(request.args.get("roomCode"))
     room_name = urllib.parse.unquote(request.args.get("roomName"))
     initial_data = {
@@ -86,7 +68,7 @@ def createRoomPath():
 
 
 @app.route("/checkRoom")
-def checkRoomPath():
+def check_room():
     room_code = urllib.parse.unquote(request.args.get("roomCode"))
     room = rooms_ref.document(room_code).get().to_dict()
 

@@ -23,5 +23,5 @@ configs = {
 }
 
 
-def getConfig(platform="server"):
+def get_config(platform="server"):
     return configs[environ.get("FLASK_ENV")][platform]
