@@ -88,8 +88,8 @@ export default class App extends Component {
   componentDidMount() {
     this.hydrateFromLocalStorage();
     socket.on('connect', this.onConnectSocket);
-    socket.on('join_room_success', data => console.log('Successfully joined room: ', data));
-    socket.on('rejoin_room_success', data => console.log('Successfully re-joined room: ', data));
+    socket.on('join_room_success', data => console.log('Successfully joined room.', data));
+    socket.on('rejoin_room_success', data => console.log('Successfully re-joined room.', data));
     socket.on('update_matches', this.onUpdateMatches);
   }
 
@@ -101,14 +101,10 @@ export default class App extends Component {
       const userMatches = JSON.parse(localStorage.getItem('user-matches'));
       const roomCode = localStorage.getItem('room-code');
       const roomName = localStorage.getItem('room-name');
-      this.setState({ userId, userName, userQuestionRankings, userMatches, roomCode, roomName });
-      console.log('Hydrating from local storage');
-      console.log(`User ID: ${userId}`);
-      console.log(`User Name: ${userName}`);
-      console.log(`User Question Rankings: `, userQuestionRankings);
-      console.log(`User Matches: `, userMatches);
-      console.log(`Room Code: ${roomCode}`);
-      console.log(`Room Name: ${roomName}`);
+      this.setState(
+        { userId, userName, userQuestionRankings, userMatches, roomCode, roomName },
+        () => console.log('Hydrated data from local storage.', this.state)
+      );
 
       if (userId === null) {
         const newId = uuid();
@@ -192,8 +188,18 @@ export default class App extends Component {
 
     socket.emit('join_room', { roomCode, user: { userId, userName, userDescription } });
     this.setState({ userName, roomCode, roomName });
-    this.navigate(userQuestionRankings == null ? PAGES.QuestionRanker : PAGES.Room);
     this.saveUserRoom(userName, roomCode, roomName);
+
+    if (userQuestionRankings) {
+      this.navigate(PAGES.Room);
+      socket.emit('update_question_rankings', {
+        userId,
+        userQuestionRankings,
+        roomCode,
+      });
+    } else {
+      this.navigate(PAGES.QuestionRanker);
+    }
   };
 
   onRetakeQuestionRanker = () => {
@@ -238,7 +244,7 @@ export default class App extends Component {
 
   onUpdateMatches = ({ users, matches }) => {
     const { userId } = this.state;
-    console.log('Receiving matches: ', matches, users);
+    console.log('Receiving matches', matches, 'with users', users);
 
     const currentUserMatches = {};
     for (let matchId in matches) {
@@ -264,7 +270,6 @@ export default class App extends Component {
   render() {
     const {
       page,
-      userId,
       userName,
       roomSelection,
       roomCode,
