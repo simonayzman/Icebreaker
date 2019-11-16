@@ -44,17 +44,21 @@ export default class RoomScreen extends Component {
     let body;
     if (matches) {
       const matchesArray = Object.values(matches);
-      const sortedMatches = matchesArray.sort(
-        (match1, match2) => match2.matchPercentage - match1.matchPercentage
-      );
-      body = (
-        <>
-          <List>{sortedMatches.map(this.renderMatch)}</List>
-          <Button onClick={onRetakeQuestionRanker} style={{ marginTop: '20px' }}>
-            {'Re-rank questions!'}
-          </Button>
-        </>
-      );
+      if (matchesArray.length > 0) {
+        const sortedMatches = matchesArray.sort(
+          (match1, match2) => match2.matchPercentage - match1.matchPercentage
+        );
+        body = (
+          <>
+            <List>{sortedMatches.map(this.renderMatch)}</List>
+            <Button onClick={onRetakeQuestionRanker} style={{ marginTop: '20px' }}>
+              {'Re-rank questions!'}
+            </Button>
+          </>
+        );
+      } else {
+        body = <h4>{"You're the only one here!"}</h4>;
+      }
     } else {
       body = <Spinner animation="border" size="lg" variant="primary" />;
     }
