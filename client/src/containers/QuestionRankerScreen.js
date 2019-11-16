@@ -173,7 +173,7 @@ export default class QuestionRankerScreen extends Component {
         <CardContainer visible={index === cardIndex} lastRanking={lastRanking}>
           <CardImage src={require(`../assets/${image}.png`)} />
           <CardText>{prompt}</CardText>
-          <CardSubtitleText>{'(How much would you want to talk about this?)'}</CardSubtitleText>
+          <CardSubtitleText>{'(Do you want to talk about this?)'}</CardSubtitleText>
         </CardContainer>
       </Swipeable>
     );
