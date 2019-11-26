@@ -22,7 +22,64 @@ What happens next is up to you! You choose who to talk to and what to talk to ab
 
 ## Technologies Used
 
-The front-end will be built with [React](https://reactjs.org/) and will connect to a [Flask](https://flask.palletsprojects.com/en/1.1.x/) (Python-based) back-end. Data will be a stored in a [Firebase](https://firebase.google.com/) real-time database, specifically [Firestore](https://firebase.google.com/docs/firestore). The real-time connection will be maintained via [Socket.IO](https://socket.io/).
+The front-end is built with [React](https://reactjs.org/) and connects to a [Flask](https://flask.palletsprojects.com/en/1.1.x/) (Python-based) back-end hosted on [Heroku](https://www.heroku.com/). Data is stored in a [Firebase](https://firebase.google.com/) real-time database, specifically [Firestore](https://firebase.google.com/docs/firestore). The real-time connection is maintained via [Socket.IO](https://socket.io/).
+
+## Try it out!
+
+Go to http://deep-dive-072193.herokuapp.com/, and join room `AAAAAA`! This will take you through the entire flow of the application as a user. If you're hosting an event yourself, try creating a room and sharing its code with your guests!
+
+Unfortunately, it's not possible to run the app locally without a connection to a live Firebase database; the server will not function properly without it. The necessary keys/credentials are provided via a hidden, non-committed file `server/keys.json` for local runtimes and provided as environment variables in the production instance on Heroku. However, assuming all of the credentials exist, a normal development flow looks like:
+
+```
+pipenv shell    # Activate python virtual environment and install pip dependencies
+./dev.sh        # Start backend Flask server
+```
+
+In a separate terminal window:
+
+```
+cd client       # Jump to frontend/client code directory
+npm install     # Install npm dependencies for frontend
+npm start       # Start frontend server for local React bundle
+```
+
+If changes are made to the frontend code and they are ready for release, build the React production bundle (script below). However, make sure to commit it to the git repository afterwards, too, so that Heroku actually picks up the changes. This process can be automated in the future as simply a step in the CI/CD pipeline.
+
+```
+npm run build   # Updates 'client/build' directory with production React bundle
+```
+
+## Project Structure
+
+```
+.
+├── client/                  # React Application (frontend)
+│   ├── README.md
+│   ├── package.json         # Node/npm app configuration
+│   ├── public/              # Basic webapp configuration files, for local runs
+│   ├── build/               # Production bundle home; built using public/ and src/
+│   └── src/
+│        ├── assets/         # Project images, videos, etc.
+│        ├── containers/     # Top level "smart" components for app's pages
+│        ├── lib/            # Shared data, configuration, and utilities
+│        ├── styles          # High-level css styles for normalization
+│        ├── App.js          # Main app component/container
+│        └── index.js        # Top-level entrypoint for React
+│
+├── server/                  # Flask Application (backend)
+│   ├── main.py              # Entrypoint for server
+│   ├── env.py               # Environment setup
+│   ├── configs.py           # Environment dependent configuration setup
+│   ├── firebase.py          # Firebase setup for Firestore DB
+│   └── match.py             # Utilities for calculating user matching
+│
+├── dev.sh                   # Local server startup code
+├── prod.sh                  # Production server startup code
+├── runtime.txt              # Python configuration
+├── Pipfile                  # Pip dependencies for server
+├── Procfile                 # Heroku startup configuration file
+└── README.md
+```
 
 ## Credits
 
