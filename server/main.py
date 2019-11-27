@@ -1,4 +1,4 @@
-"""Top-level entrypoint for Icebreaker server code."""
+"""Top-level entrypoint for Icebreaker server code"""
 
 # Package imports
 from configs import get_config
