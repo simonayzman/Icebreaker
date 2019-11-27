@@ -81,6 +81,16 @@ npm run build   # Updates 'client/build' directory with production React bundle
 └── README.md
 ```
 
+## Future Improvements
+
+### Open Issues
+
+- Potential race condition when multiple users update their question rankings at the same time. Could lead to state where ultimate matches list does not show all the users in the room.
+
+  **Quick fix**: Polling mechanism that "updates" the user's question rankings every minute or so (even if no change occurred). Not ideal because it leads to too many extra calls, and still leaves a period of time with inaccurate information.
+
+  **Better solution**: Create mutex locks around code that changes the Firestore DB (and potentially use an event queue), specifically where key-update collisions might occur or the most up-to-date information is required. Unfortunately, this could lead to extra latency, but ensures real-time accuracy.
+
 ## Credits
 
 Initial version of [the React front-end code](https://github.com/acesetmatch/Icebreaker) was sourced from [a Facebook Chicago Hackathon project](https://devpost.com/software/icebreaker-vi5yo8) I built with my team, of the same name.
