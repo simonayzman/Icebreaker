@@ -1,17 +1,12 @@
 """Top-level entrypoint for Icebreaker server code"""
 
 # Package imports
-from configs import get_config
-from os import environ
 from flask import Flask, render_template, send_from_directory, request, jsonify
 from flask_socketio import SocketIO, emit, join_room
 from flask_cors import CORS
 from flask_debug import Debug
-from datetime import datetime
-from uuid import uuid4
-import urllib
 from json import dumps
-import google
+import urllib
 
 # Local imports
 import env
