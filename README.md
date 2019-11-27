@@ -14,7 +14,7 @@ Let's say you're planning a low-key party at your house. Not everyone will know 
 
 Now let's switch our perspective to you as a guest. You get to the party, and the host shares the room code with you. You come to the site, enter the code (along with some identifying information), and then get whisked into the core of the digital experience.
 
-First, you see a "Tinder" like experience, except instead of swiping on people, you're swiping on **questions** and **topics**. In other words, would you want to answer these questions or talk about these topics with someone else in a 1:1 conversation? If yes, swipe right! If no, swipe left! Really love it? Swipe up for a super like!
+First, you see a "Tinder" like experience, except instead of swiping on people, you're swiping on **questions** and **topics**. In other words, would you want to answer these questions or talk about these topics with someone else in a 1:1 conversation? If yes, _swipe right_! If no, _swipe left_! Really love it? _Swipe up for a super like_! Don't really care one way or another? _Swipe down_.
 
 Once you're finished swiping, you enter the "digital room." You'll see a list of all the people at the party, ordered by how closely they match with you over your preferred questions and topics of conversation! Moreover, this list updates in real time, meaning that as new people join the party, you might find an even better top-ranked match later into the night. You can click into a person's profile from the list, and see specifically what you two can bond over.
 
