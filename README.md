@@ -91,6 +91,19 @@ npm run build   # Updates 'client/build' directory with production React bundle
 
   **Better solution**: Create mutex locks around code that changes the Firestore DB (and potentially use an event queue), specifically where key-update collisions might occur or the most up-to-date information is required. Unfortunately, this could lead to extra latency, but ensures real-time accuracy.
 
+### Features (Short-Term)
+
+- More intuitive home page interface for re-joining past event rooms
+- Flexible event "types" that have their own unique question packs
+- User profile picture upload for easier recognition in real life
+- Event time ranges, along with intelligent garbage collection of rooms on backend
+
+### Features (Long-Term)
+
+- Curated faciliation of 1:1 introductions, rather than simple rank-ordered list of matches
+- Option for more flexible question selection flow for event hosts
+- Chat functionality between event participants
+
 ## Credits
 
 Initial version of [the React front-end code](https://github.com/acesetmatch/Icebreaker) was sourced from [a Facebook Chicago Hackathon project](https://devpost.com/software/icebreaker-vi5yo8) I built with my team, of the same name.
