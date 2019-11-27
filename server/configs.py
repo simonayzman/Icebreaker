@@ -1,3 +1,5 @@
+"""Environment dependent configuration setup"""
+
 from os import environ
 
 configs = {
@@ -24,4 +26,13 @@ configs = {
 
 
 def get_config(platform="server"):
+    """
+    Provides configuration values based on the environment and the requested platform
+
+    Args:
+        platform (str): Accepts "server" or "client" representing the platforms supported
+
+    Returns:
+        dict: Object representing relevant configuration data
+    """
     return configs[environ.get("FLASK_ENV")][platform]

@@ -1,3 +1,5 @@
+"""Top-level entrypoint for Icebreaker server code."""
+
 # Package imports
 from configs import get_config
 from os import environ
@@ -17,6 +19,7 @@ from firebase import rooms_ref
 from configs import get_config
 from match import determine_matches
 
+# Router/socket setup
 app = Flask(
     __name__,
     static_folder=get_config()["static"],
@@ -29,17 +32,31 @@ socketio = SocketIO(app, async_mode="eventlet")
 # App routes
 @app.route("/")
 def index():
+    """Provides environment dependent client html file"""
     config_json_string = dumps(get_config(platform="client"))
     return render_template("index.html", config=config_json_string)
 
 
 @app.route("/<path:path>")
 def index_resource(path):
+    """Provides environment dependent resource files, like assets, manifests, etc."""
     return send_from_directory(get_config()["template"], path)
 
 
 @app.route("/createRoom")
 def create_room():
+    """
+    Creates a new room entry based on user information
+
+    Query Parameter Args:
+        roomCode (str): The 6-letter room identifying code.
+        roomName (str): The user-defined room name.
+
+    Returns:
+        string: JSON file denoting room creation success or failure.
+            If successful, contains "ok" as True.
+            If not successful, contains "error" as True, along with other error information.
+    """
     room_code = urllib.parse.unquote(request.args.get("roomCode"))
     room_name = urllib.parse.unquote(request.args.get("roomName"))
     initial_data = {
@@ -73,6 +90,17 @@ def create_room():
 
 @app.route("/checkRoom")
 def check_room():
+    """
+    Checks if room entry exists based on the provided room code
+
+    Query Parameter Args:
+        roomCode (str): The 6-letter room identifying code.
+
+    Returns:
+        string: JSON file denoting room creation success or failure.
+            If successful, contains room data.
+            If not successful, contains "error" as True, along with other error information.
+    """
     room_code = urllib.parse.unquote(request.args.get("roomCode"))
     room = rooms_ref.document(room_code).get().to_dict()
 
@@ -83,9 +111,9 @@ def check_room():
         response = room
 
     if response.get("error"):
-        print(f"Room creation for code {room_code} error: {response}\n")
+        print(f"Room check for code {room_code} error: {response}\n")
     else:
-        print(f"Room creation for code {room_code} successful.\n")
+        print(f"Room check for code {room_code} successful.\n")
 
     return jsonify(response)
 
@@ -93,11 +121,20 @@ def check_room():
 # Socket connections
 @socketio.on("connect")
 def on_connect():
+    """Convenience for determining valid socket connections"""
     print("Socket connected on the back-end.\n")
 
 
 @socketio.on("rejoin_room")
 def on_rejoin_room(data):
+    """
+    Reconnects the user to the provided room and notifies the whole room
+
+    Args:
+        data (dict):
+            roomCode (str): The 6-letter room identifying code.
+            userId (str): The user's unique id.
+    """
     print(f"Re-joining room: {data}\n")
     room_code = data["roomCode"]
     user_id = data["userId"]
@@ -107,6 +144,17 @@ def on_rejoin_room(data):
 
 @socketio.on("join_room")
 def on_join_room(data):
+    """
+    Connects the user to the provided room, adds their entry to the
+    Firestore database, and notifies the whole room
+
+    Args:
+        data (dict):
+            roomCode (str): The 6-letter room identifying code.
+            user (dict):
+                userId (str): The user's unique id.
+                ...other data: Any other information provided by the user.
+    """
     print(f"Joining room: {data}\n")
     room_code = data["roomCode"]
     user = data["user"]
@@ -123,6 +171,17 @@ def on_join_room(data):
 # Consider using a queue for synchronous updates
 @socketio.on("update_question_rankings")
 def on_update_question_rankings(data):
+    """
+    Takes the user's rankings of the questions, determines the match strength
+    and common questions with all the other users in the room, and notifies
+    the whole room of the new matches with the user
+
+    Args:
+        data (dict):
+            userId (str): The user's unique id.
+            userQuestionRankings (dict): The user's rankings of the questions.
+            roomCode (str): The 6-letter room identifying code.
+    """
     print(f"Updating question rankings: {data}\n")
     user_id = data["userId"]
     user_question_rankings = data["userQuestionRankings"]

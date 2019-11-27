@@ -1,3 +1,4 @@
+"""Utilities for connecting to Firebase's Firestore DB"""
 from os import environ
 from json import loads
 from firebase_admin import initialize_app
