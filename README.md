@@ -46,7 +46,15 @@ npm start       # Start frontend server for local React bundle
 If changes are made to the frontend code and they are ready for release, build the React production bundle (script below). However, make sure to commit it to the git repository afterwards, too, so that Heroku actually picks up the changes. This process can be automated in the future as simply a step in the CI/CD pipeline.
 
 ```
+# Run within client/
 npm run build   # Updates 'client/build' directory with production React bundle
+```
+
+To run tests:
+
+```
+# Run at top-level directory
+./test.sh
 ```
 
 ## Project Structure
@@ -71,10 +79,12 @@ npm run build   # Updates 'client/build' directory with production React bundle
 │   ├── env.py               # Environment setup
 │   ├── configs.py           # Environment dependent configuration setup
 │   ├── firebase.py          # Firebase setup for Firestore DB
-│   └── match.py             # Utilities for calculating user matching
+│   ├── match.py             # Utilities for calculating user matching
+│   └── tests.py             # All of the necessary backend testing code
 │
 ├── dev.sh                   # Local server startup code
 ├── prod.sh                  # Production server startup code
+├── test.sh                  # Runs all application tests
 ├── runtime.txt              # Python configuration
 ├── Pipfile                  # Pip dependencies for server
 ├── Procfile                 # Heroku startup configuration file
