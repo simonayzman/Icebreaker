@@ -16,10 +16,11 @@ const MatchedUserScreenContainer = styled.div`
 const ListRow = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   padding: 10px;
   color: black;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   background-color: white;
 `;
 
@@ -27,12 +28,17 @@ const CommonQuestionText = styled.h5`
   color: ${colors.pop};
 `;
 
+const PromptText = styled.div`
+  line-height: 1;
+  font-size: 18px;
+`;
+
 export default class MatchedUserScreen extends Component {
   renderQuestion = questionId => {
     const question = QUESTIONS[questionId];
     return (
       <ListRow key={questionId}>
-        <div>{question.prompt}</div>
+        <PromptText>{question.prompt}</PromptText>
       </ListRow>
     );
   };
