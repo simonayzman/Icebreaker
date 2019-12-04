@@ -60,18 +60,17 @@ def create_room():
         "matches": {},
     }
 
-    response = None
     try:
         room = rooms_ref.document(room_code).get().to_dict()
-        if room is None:
-            rooms_ref.document(room_code).set(initial_data)
-            response = {"ok": True}
-        else:
+        if room:
             response = {
                 "error": True,
                 "errorType": "Room already exists.",
                 "room": room,
             }
+        else:
+            rooms_ref.document(room_code).set(initial_data)
+            response = {"ok": True}
     except:
         response = {"error": True, "errorType": "Unknown error"}
 
@@ -99,7 +98,6 @@ def check_room():
     room_code = urllib.parse.unquote(request.args.get("roomCode"))
     room = rooms_ref.document(room_code).get().to_dict()
 
-    response = None
     if room is None:
         response = {"error": True}
     else:
