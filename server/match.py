@@ -7,6 +7,8 @@ POSITIVE_COMPATIBILITY_WEAK_2 = 1.0
 POSITIVE_COMPATIBILITY_STRONG_1 = 1.5
 POSITIVE_COMPATIBILITY_STRONG_2 = 2.0
 
+INVALID_COMPATIBILITY = 0.0
+
 # Determines heuristic bounds for min/max compatibility
 MIN_COMPATIBILITY_VALUE = NEGATIVE_COMPATIBILITY_WEAK_1
 MAX_COMPATIBILITY_VALUE = POSITIVE_COMPATIBILITY_STRONG_2
@@ -59,6 +61,8 @@ def score_question_compatibility(user1_question_ranking, user2_question_ranking)
             return POSITIVE_COMPATIBILITY_STRONG_1
         elif user2_question_ranking == "superlike":
             return POSITIVE_COMPATIBILITY_STRONG_2
+
+    return INVALID_COMPATIBILITY
 
 
 def is_question_ranking_positive(question_ranking):
