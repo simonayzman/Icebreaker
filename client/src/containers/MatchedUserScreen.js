@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import QUESTIONS from '../lib/questions';
+import colors from '../lib/colors';
 
 const MatchedUserScreenContainer = styled.div`
   display: flex;
@@ -22,6 +23,10 @@ const ListRow = styled.div`
   background-color: white;
 `;
 
+const CommonQuestionText = styled.h5`
+  color: ${colors.pop};
+`;
+
 export default class MatchedUserScreen extends Component {
   renderQuestion = questionId => {
     const question = QUESTIONS[questionId];
@@ -40,9 +45,9 @@ export default class MatchedUserScreen extends Component {
     return (
       <MatchedUserScreenContainer>
         <h2>{userName}</h2>
-        <h4>{userDescription}</h4>
+        <h5>{userDescription}</h5>
         <br />
-        <h5>{'Strike up a conversation!'}</h5>
+        <CommonQuestionText>{'Strike up a conversation!'}</CommonQuestionText>
         {commonQuestions.map(this.renderQuestion)}
       </MatchedUserScreenContainer>
     );

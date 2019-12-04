@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Button, Spinner } from 'react-bootstrap';
 import FlipMove from 'react-flip-move';
+import { TiChevronRightOutline } from 'react-icons/ti';
+import colors from '../lib/colors';
 
 const RoomScreenContainer = styled.div`
   display: flex;
@@ -21,10 +23,16 @@ const ListRow = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 10px;
   color: black;
   margin-bottom: 10px;
-  background-color: ${({ highlight }) => (highlight === true ? 'orange' : 'white')};
+  background-color: ${({ highlight }) => (highlight === true ? colors.pop : 'white')};
+`;
+
+const ListText = styled.div`
+  line-height: 1;
+  font-size: 18px;
 `;
 
 export default class RoomScreen extends Component {
@@ -32,8 +40,11 @@ export default class RoomScreen extends Component {
     const { onExamineUser } = this.props;
     return (
       <ListRow key={match.userId} onClick={() => onExamineUser(match)} highlight={index < 3}>
-        <div>{match.userName}</div>
-        <div>{`${(match.matchPercentage * 100).toFixed(0)}%`}</div>
+        <ListText>{match.userName}</ListText>
+        <ListText>
+          {`${(match.matchPercentage * 100).toFixed(0)}%`}
+          <TiChevronRightOutline size="25px" style={{ marginLeft: '5px' }} />
+        </ListText>
       </ListRow>
     );
   };
