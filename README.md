@@ -116,4 +116,4 @@ To run tests:
 
 ## Credits
 
-Initial version of [the React front-end code](https://github.com/acesetmatch/Icebreaker) was sourced from [a Facebook Chicago Hackathon project](https://devpost.com/software/icebreaker-vi5yo8) I built with my team, of the same name.
+Early version of [the React front-end code](https://github.com/acesetmatch/Icebreaker) was sourced from [a Facebook Chicago Hackathon project](https://devpost.com/software/icebreaker-vi5yo8) I built with my team, of the same name.
