@@ -6,7 +6,7 @@ Meet Jonah. An introverted, moderately quiet person between the ages of 18 - 35 
 
 Whether it’s your first day of school, a work conference, or your friend’s house party, there’s no shortage of ways to improve the experience of fostering connections. Icebreakers can be effective, but they’re often in large groups, which can be impersonal and overwhelming. Too much time and anxiety is spent on finding the right people to talk to and the right topic to talk about. A digital medium could facilitate these in-real-life encounters to great effect.
 
-Introducing, Icebreaker™ - the easy way to break the ice and make better connections. Inspired by the wonderful multiplayer experiences of [Jackbox Games](https://jackboxgames.com/) and [Spyfall](https://spyfall.crabhat.com/), Icebreaker fosters deeper IRL connections between people, based around the topics they'd like to talk about and the questions they’d love to delve into together.
+Introducing, Icebreaker™ - the easy way to break the ice and make better connections. Inspired by the wonderful multiplayer experiences of [Jackbox Games](https://jackboxgames.com/) and [Spyfall](https://spyfall.adrianocola.com/), Icebreaker fosters deeper IRL connections between people, based around the topics they'd like to talk about and the questions they’d love to delve into together.
 
 ## How does it work?
 
