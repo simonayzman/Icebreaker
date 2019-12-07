@@ -18,7 +18,7 @@ First, you see a "Tinder" like experience, except instead of swiping on people, 
 
 Once you're finished swiping, you enter the "digital room." You'll see a list of all the people at the party, ordered by how closely they match with you over your preferred questions and topics of conversation! Moreover, this list updates in real time, meaning that as new people join the party, you might find an even better top-ranked match later into the night. You can click into a person's profile from the list, and see specifically what you two can bond over.
 
-What happens next is up to you! You choose who to talk to and what to talk to about. Happy friendshipping!
+What happens next is up to you! You choose who to talk to and what to talk to about. Happy friendshipping! [Watch the demo here](./demo.mp4).
 
 ## Technologies Used
 
